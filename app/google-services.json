@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298111324274",
+    "project_id": "faturasua",
+    "storage_bucket": "faturasua.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298111324274:android:11ee293d53dde67e36b2eb",
+        "android_client_info": {
+          "package_name": "pt.cm.faturasua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdLvjPTv9RC5lS3mze_3nVo-Xbx1yY22U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
