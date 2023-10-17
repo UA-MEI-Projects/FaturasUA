@@ -2,6 +2,7 @@ package pt.cm.faturasua.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Share
@@ -18,21 +19,15 @@ sealed class BottomBarClass(
         icon = Icons.Default.List
     )
 
-    object Scan : BottomBarClass(
-        route = "scan",
-        title = "Scan",
-        icon = Icons.Default.ArrowDropDown
+    object Dashboard : BottomBarClass(
+        route = "dashboard",
+        title = "dashboard",
+        icon = Icons.Default.Home
     )
 
     object Statistics : BottomBarClass(
         route = "statistics",
         title = "Statistics",
         icon = Icons.Default.Share
-    )
-
-    object Maps : BottomBarClass(
-        route = "maps",
-        title = "Maps",
-        icon = Icons.Default.LocationOn
     )
 }

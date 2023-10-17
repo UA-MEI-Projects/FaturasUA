@@ -88,9 +88,8 @@ fun TopBar(onSignIn: () -> Unit, modifier : Modifier = Modifier) {
 fun BottomBar(navController: NavController) {
     val screen = listOf(
         BottomBarClass.History,
-        BottomBarClass.Scan,
         BottomBarClass.Statistics,
-        BottomBarClass.Maps
+        BottomBarClass.Dashboard
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
