@@ -26,23 +26,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(::signInCallback)
+                    MainScreen()
                 }
             }
         }
 
-    }
-
-    private fun signInCallback() {
-        val authUtil = AuthUtil()
-
-        val signInLauncher = registerForActivityResult(
-            FirebaseAuthUIActivityResultContract(),
-        ) { res ->
-            authUtil.onSignInResult(res)
-        }
-
-        signInLauncher.launch(authUtil.themeAndLogo())
     }
 }
 
@@ -50,6 +38,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     FaturasUATheme {
-        MainScreen({})
+        MainScreen()
     }
 }
