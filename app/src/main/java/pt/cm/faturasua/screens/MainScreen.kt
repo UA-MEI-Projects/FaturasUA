@@ -33,18 +33,19 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pt.cm.faturasua.components.BottomBarClass
-import pt.cm.faturasua.navigation.BottomBarNavGraph
+import pt.cm.faturasua.components.DropdownMenuClass
+import pt.cm.faturasua.navigation.NavGraph
 
 @Composable
-fun MainScreen(onSignIn : () -> Unit) {
+fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold(
-        topBar = { TopBar(onSignIn) },
+        topBar = { TopBar(navController = navController) },
         bottomBar = { BottomBar(navController = navController) }
     ) {
         it
-        BottomBarNavGraph(
+        NavGraph(
             navController = navController
         )
     }
@@ -52,10 +53,17 @@ fun MainScreen(onSignIn : () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(onSignIn: () -> Unit, modifier : Modifier = Modifier) {
+fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
     var menuExpanded by remember{
         mutableStateOf(false)
     }
+
+    val screens = listOf(
+        DropdownMenuClass.Profile,
+        DropdownMenuClass.Settings,
+        DropdownMenuClass.LogOut
+    )
+
     TopAppBar(title = {
         Text(text = "FaturasUA", color = Color.White)
     },
@@ -72,12 +80,10 @@ fun TopBar(onSignIn: () -> Unit, modifier : Modifier = Modifier) {
                 )
             }
 
-            DropdownMenu(expanded = menuExpanded, onDismissRequest = { /*TODO*/ }) {
-                DropdownMenuItem(text = { "Sign In" }, onClick = {
-                    onSignIn()
-                })
-                DropdownMenuItem(text = { "Settings" }, onClick = { /*TODO*/ })
-                DropdownMenuItem(text = { "About" }, onClick = { /*TODO*/ })
+            DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                screens.forEach { screen ->
+                    DropdownMenuItem(text = { screen.title }, onClick = { navController.navigate(screen.route) })
+                }
             }
         },
         modifier = modifier
@@ -88,8 +94,8 @@ fun TopBar(onSignIn: () -> Unit, modifier : Modifier = Modifier) {
 fun BottomBar(navController: NavController) {
     val screen = listOf(
         BottomBarClass.History,
-        BottomBarClass.Statistics,
-        BottomBarClass.Dashboard
+        BottomBarClass.Dashboard,
+        BottomBarClass.Statistics
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
