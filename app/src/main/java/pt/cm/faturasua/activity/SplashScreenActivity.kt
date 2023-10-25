@@ -11,8 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.compose.FaturasUATheme
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import pt.cm.faturasua.ui.theme.FaturasUATheme
 import pt.cm.faturasua.utils.AuthUtil
 
 class SplashScreenActivity : ComponentActivity() {

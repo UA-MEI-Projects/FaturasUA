@@ -36,7 +36,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -51,13 +53,13 @@ fun ScanFAB(
     modifier: Modifier = Modifier,
     navController: NavController,
     scanFABState: ScanFABState,
-    onScanFabStateChange: (ScanFABState) -> Unit,
-    items : List<ScanFABItemClass>){
+    onScanFabStateChange: (ScanFABState) -> Unit){
 
-    // put this in main screen
-    var floatingActionButtonState by remember{
-        mutableStateOf(ScanFABState.Collapsed)
-    }
+    val items = listOf(
+        ScanFABItemClass.Scan,
+        ScanFABItemClass.AddImage
+    )
+
 
     val transition = updateTransition(targetState = scanFABState, label = "transition")
 
@@ -148,6 +150,7 @@ fun ScanFABItem(
 ){
     val buttonColors = MaterialTheme.colorScheme.secondary
     val shadow = Color.Black.copy(0.5f)
+//    val image: ImageBitmap = ImageBitmap.imageResource(id = item.iconId)
     Row {
        if(showLabel){
            Text(
@@ -170,15 +173,17 @@ fun ScanFABItem(
        }
         
         Canvas(
-            modifier = Modifier.size(32.dp).clickable(
-                interactionSource = MutableInteractionSource(),
-                indication = rememberRipple(
-                    bounded = true,
-                    radius = 20.dp,
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                onClick = onScanFabItemClick.invoke(item)
-            )
+            modifier = Modifier
+                .size(32.dp)
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = rememberRipple(
+                        bounded = true,
+                        radius = 20.dp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
+                    onClick = { onScanFabItemClick.invoke(item) }
+                )
         ) {
             drawCircle(
                 color = shadow,
@@ -194,14 +199,14 @@ fun ScanFABItem(
                 radius = itemScale
             )
 
-            drawImage(
-                image = item.icon,
+/*            drawImage(
+                image = image,
                 topLeft = Offset(
-                    center.x - (item.icon.width / 2),
-                    center.y - (item.icon.width / 2)
+                    center.x - (image.width / 2),
+                    center.y - (image.height / 2)
                 ),
                 alpha = alpha
-            )
+            )*/
         }
     }
 }
