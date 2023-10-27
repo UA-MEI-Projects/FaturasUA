@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI.IdpConfig
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import pt.cm.faturasua.R
 
 class AuthUtil {
 
@@ -27,7 +28,7 @@ class AuthUtil {
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
 //            .setLogo(R.drawable.zypho_logo)
-//            .setTheme(R.style.Theme_Zypho_Login)
+            .setTheme(R.style.Theme_FaturasUA)
             .build()
 
         return signInIntent

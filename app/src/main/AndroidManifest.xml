@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FaturasUA"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.ScanActivity"
+            android:exported="false"
+            android:label="@string/title_activity_scan"
+            android:theme="@style/Theme.FaturasUA" />
         <activity
             android:name=".activity.SplashScreenActivity"
             android:exported="true"

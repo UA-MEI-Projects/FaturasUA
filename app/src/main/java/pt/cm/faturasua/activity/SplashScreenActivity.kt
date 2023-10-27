@@ -11,13 +11,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import pt.cm.faturasua.ui.theme.FaturasUATheme
+import com.example.compose.FaturasUATheme
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import pt.cm.faturasua.utils.AuthUtil
 
 class SplashScreenActivity : ComponentActivity() {
+
+    private fun signInCallback() {
+        val authUtil = AuthUtil()
+
+        val signInLauncher = registerForActivityResult(
+            FirebaseAuthUIActivityResultContract(),
+        ) { res ->
+            authUtil.onSignInResult(res)
+        }
+
+        signInLauncher.launch(authUtil.themeAndLogo())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        signInCallback()
 
 
         setContent {
