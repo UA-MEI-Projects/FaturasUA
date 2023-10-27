@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +41,9 @@ import pt.cm.faturasua.components.TopBar
 import pt.cm.faturasua.navigation.NavGraph
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onScanSelected: () -> Unit
+) {
     val navController = rememberNavController()
     var floatingActionButtonState by remember{
         mutableStateOf(ScanFABState.Collapsed)
@@ -54,7 +57,8 @@ fun MainScreen() {
             scanFABState = floatingActionButtonState,
             onScanFabStateChange = {
                 floatingActionButtonState = it
-            }
+            },
+            onScanSelected = onScanSelected
         )}
     ) {
         it

@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    val material3_version = "1.1.2"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -63,7 +66,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation ("androidx.compose.material3:material3:$material3_version")
     implementation("androidx.navigation:navigation-compose:2.7.4")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.camera:camera-core:1.3.0")

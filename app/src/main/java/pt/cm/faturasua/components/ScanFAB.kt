@@ -1,5 +1,6 @@
 package pt.cm.faturasua.components
 
+import android.content.Intent
 import android.graphics.fonts.FontStyle
 import android.util.Log
 import androidx.compose.animation.core.animate
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,6 +46,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
+import pt.cm.faturasua.activity.MainActivity
 import pt.cm.faturasua.classes.ScanFABItemClass
 import pt.cm.faturasua.classes.ScanFABState
 
@@ -53,13 +57,15 @@ fun ScanFAB(
     modifier: Modifier = Modifier,
     navController: NavController,
     scanFABState: ScanFABState,
-    onScanFabStateChange: (ScanFABState) -> Unit){
+    onScanFabStateChange: (ScanFABState) -> Unit,
+    onScanSelected: () -> Unit
+){
+    val scope = rememberCoroutineScope()
 
     val items = listOf(
         ScanFABItemClass.Scan,
         ScanFABItemClass.AddImage
     )
-
 
     val transition = updateTransition(targetState = scanFABState, label = "transition")
 
@@ -99,7 +105,7 @@ fun ScanFAB(
                     onScanFabItemClick = {scanFABItem ->
                         when(scanFABItem.route){
                             ScanFABItemClass.Scan.route ->{
-                                navController.navigate(scanFABItem.route)
+                                onScanSelected()
                                 Log.d("Navigation", "Navigate to Scan Screen")
                             }
                             ScanFABItemClass.AddImage.route -> {
@@ -116,13 +122,16 @@ fun ScanFAB(
         }
         FloatingActionButton(
             onClick = {
-                onScanFabStateChange (
-                    if (transition.currentState == ScanFABState.Expanded) {
-                        ScanFABState.Collapsed
-                    } else {
-                        ScanFABState.Expanded
-                    }
-                )
+                scope.launch {
+                    onScanFabStateChange (
+                        if (transition.currentState == ScanFABState.Expanded) {
+                            ScanFABState.Collapsed
+                        } else {
+                            ScanFABState.Expanded
+                        }
+                    )
+                }
+
             },
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.primary,

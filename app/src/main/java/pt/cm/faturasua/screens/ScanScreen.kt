@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
 package pt.cm.faturasua.screens
 
 import android.Manifest
@@ -18,12 +19,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,18 +38,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.launch
 import pt.cm.faturasua.utils.QrCodeUtil
 
+@ExperimentalMaterial3Api
 @Composable
 fun ScanScreen(){
-    var qrCode by remember{
-        mutableStateOf("")
-    }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
     }
+    var showBottomSheet by remember{
+        mutableStateOf(false)
+    }
+    var qrCode by remember{
+        mutableStateOf("")
+    }
+    val sheetState = rememberModalBottomSheetState()
     var hasCameraPermission by remember{
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -91,6 +103,10 @@ fun ScanScreen(){
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
                         qrCode = result
+                        scope.launch {
+                            sheetState.expand()
+                            showBottomSheet = true
+                        }
                     }
                 )
                 try {
@@ -107,14 +123,19 @@ fun ScanScreen(){
             },
                     modifier = Modifier.weight(1f)
             )
-            Text(
-                text = qrCode,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp)
-            )
+            if(showBottomSheet){
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    modifier = Modifier.padding(20.dp)
+                ){
+                    Text(qrCode)
+                }
+
+            }
+
         }
     }
 }
