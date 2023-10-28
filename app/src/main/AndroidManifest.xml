@@ -19,22 +19,6 @@
         android:theme="@style/Theme.FaturasUA"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ScanActivity"
-            android:exported="false"
-            android:label="@string/title_activity_scan"
-            android:theme="@style/Theme.FaturasUA" />
-        <activity
-            android:name=".activity.SplashScreenActivity"
-            android:exported="true"
-            android:label="@string/title_activity_splash_screen"
-            android:theme="@style/Theme.FaturasUA">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
