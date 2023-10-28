@@ -9,10 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import pt.cm.faturasua.screens.MainScreen
 import pt.cm.faturasua.ui.theme.FaturasUATheme
-import pt.cm.faturasua.utils.AuthUtil
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
