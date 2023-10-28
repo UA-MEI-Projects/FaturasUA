@@ -2,10 +2,11 @@ package pt.cm.faturasua.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.koin.androidx.compose.koinViewModel
 import pt.cm.faturasua.classes.BottomBarClass
 import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.classes.ScanFABItemClass
@@ -21,11 +22,13 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    userViewModel: UserViewModel = viewModel()
+    userViewModel: UserViewModel = koinViewModel(),
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarClass.History.route
+        startDestination = BottomBarClass.Dashboard.route,
+        modifier = modifier
     ) {
         composable(BottomBarClass.History.route){
             HistoryScreen()

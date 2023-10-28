@@ -105,7 +105,7 @@ fun ScanFAB(
                     onScanFabItemClick = {scanFABItem ->
                         when(scanFABItem.route){
                             ScanFABItemClass.Scan.route ->{
-                                onScanSelected()
+                                navController.navigate(ScanFABItemClass.Scan.route)
                                 Log.d("Navigation", "Navigate to Scan Screen")
                             }
                             ScanFABItemClass.AddImage.route -> {

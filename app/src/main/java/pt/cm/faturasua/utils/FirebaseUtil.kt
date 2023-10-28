@@ -23,20 +23,18 @@ import kotlinx.coroutines.flow.stateIn
 import pt.cm.faturasua.R
 import pt.cm.faturasua.data.Receipt
 import pt.cm.faturasua.viewmodel.UserViewModel
+import javax.inject.Inject
 
-class FirebaseUtil {
-    private lateinit var authUI: AuthUI
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseDatabase: FirebaseDatabase
+class FirebaseUtil  @Inject constructor (
+    val authUI: AuthUI,
+    val firebaseAuth: FirebaseAuth,
+    val firebaseDatabase: FirebaseDatabase
+){
     private lateinit var databaseReference: DatabaseReference
 
-    val dbReceiptsRef = databaseReference.child("users").child(firebaseAuth.currentUser!!.uid)
-
-    init {
-        authUI = AuthUI.getInstance()
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseDatabase = FirebaseDatabase.getInstance()
+    val dbReceiptsRef = {
         databaseReference = firebaseDatabase.getReference()
+        databaseReference.child("users").child(firebaseAuth.currentUser!!.uid)
     }
 
     fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
@@ -85,13 +83,13 @@ class FirebaseUtil {
     }.stateIn(scope, SharingStarted.WhileSubscribed(), firebaseAuth.currentUser != null)
 
     fun addReceiptToDB(receipt: Receipt){
-        dbReceiptsRef.child(receipt.receiptNumber).setValue(receipt)
+        dbReceiptsRef().child(receipt.receiptNumber).setValue(receipt)
     }
 
     fun receiptsListener(){
         var dummyModel = UserViewModel()
 
-        dbReceiptsRef
+        dbReceiptsRef()
             .addChildEventListener(object : ChildEventListener{
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     dummyModel.receiptsList.value!!.add(snapshot.getValue(Receipt::class.java)!!)

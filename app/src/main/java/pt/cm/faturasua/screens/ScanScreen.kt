@@ -17,7 +17,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -33,13 +32,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import pt.cm.faturasua.utils.QrCodeUtil
+import pt.cm.faturasua.utils.ReceiptNotificationService
 
 @ExperimentalMaterial3Api
 @Composable
@@ -72,6 +72,9 @@ fun ScanScreen(){
             hasCameraPermission = granted
         }
     )
+    val receiptNotificationService = remember{
+        ReceiptNotificationService(context = context)
+    }
 
     LaunchedEffect(key1 = true){
         launcher.launch(Manifest.permission.CAMERA)
@@ -106,6 +109,7 @@ fun ScanScreen(){
                         scope.launch {
                             sheetState.expand()
                             showBottomSheet = true
+                            receiptNotificationService.sendReceiptAddedNotification()
                         }
                     }
                 )
@@ -131,7 +135,11 @@ fun ScanScreen(){
                     sheetState = sheetState,
                     modifier = Modifier.padding(20.dp)
                 ){
-                    Text(qrCode)
+                    Column {
+                        Text(qrCode)
+                        MapsScreen(pos = LatLng( 19.98556, 23.37066))
+                    }
+                    
                 }
 
             }
@@ -139,3 +147,4 @@ fun ScanScreen(){
         }
     }
 }
+

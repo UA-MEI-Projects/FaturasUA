@@ -17,8 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pt.cm.faturasua.utils.FirebaseUtil
+import javax.inject.Inject
 
-class AuthObserver(
+class AuthObserver @Inject constructor(
     private val activity: Context,
     private val firebaseUtil: FirebaseUtil
 ): DefaultLifecycleObserver {

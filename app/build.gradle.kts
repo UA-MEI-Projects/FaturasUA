@@ -56,6 +56,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     val material3_version = "1.1.2"
+    val koin_version = "3.5.0"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -78,6 +79,11 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:4.0.0")
     implementation("com.google.maps.android:maps-compose-utils:4.0.0")
     implementation("com.google.maps.android:maps-compose-widgets:4.0.0")
+
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-android:$koin_version")
+    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

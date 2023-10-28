@@ -3,6 +3,7 @@
 package pt.cm.faturasua.screens
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
@@ -34,6 +35,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.koin.core.component.get
 import pt.cm.faturasua.classes.ScanFABState
 import pt.cm.faturasua.classes.BottomBarClass
 import pt.cm.faturasua.classes.DropdownMenuClass
@@ -102,7 +104,8 @@ fun MainScreen(
         it
         NavGraph(
             navController = navController,
-            userViewModel = UserViewModel()
+            modifier = Modifier
+                .padding(it)
         )
     }
 }
