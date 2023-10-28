@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import pt.cm.faturasua.components.BottomBarClass
-import pt.cm.faturasua.components.DropdownMenuClass
+import pt.cm.faturasua.classes.BottomBarClass
+import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.screens.DashboardScreen
 import pt.cm.faturasua.screens.HistoryScreen
 import pt.cm.faturasua.screens.ProfileScreen

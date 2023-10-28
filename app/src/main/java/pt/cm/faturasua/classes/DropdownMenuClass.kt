@@ -1,4 +1,4 @@
-package pt.cm.faturasua.components
+package pt.cm.faturasua.classes
 
 sealed class DropdownMenuClass(
     val route :String,

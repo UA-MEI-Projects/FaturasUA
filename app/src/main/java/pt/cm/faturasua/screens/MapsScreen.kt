@@ -3,7 +3,7 @@ package pt.cm.faturasua.screens
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import pt.cm.faturasua.ui.theme.FaturasUATheme
+import com.example.compose.FaturasUATheme
 
 @Composable
 fun MapsScreen(){
