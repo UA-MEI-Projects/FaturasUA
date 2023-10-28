@@ -24,9 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -39,19 +41,55 @@ import pt.cm.faturasua.components.BottomBar
 import pt.cm.faturasua.components.ScanFAB
 import pt.cm.faturasua.components.TopBar
 import pt.cm.faturasua.navigation.NavGraph
+import pt.cm.faturasua.viewmodel.UserViewModel
 
 @Composable
 fun MainScreen(
-    onScanSelected: () -> Unit
+    onScanSelected: () -> Unit,
 ) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     var floatingActionButtonState by remember{
         mutableStateOf(ScanFABState.Collapsed)
     }
 
+    var showBottomBar by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var showTopBar by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    when(navBackStackEntry?.destination?.route){
+        "dashboard" -> {
+            showBottomBar = true
+            showTopBar = true
+        }
+        "history" -> {
+            showBottomBar = true
+            showTopBar = true
+        }
+        "statistic" -> {
+            showBottomBar = true
+            showTopBar = true
+        }
+        "profile" -> {
+            showBottomBar = false
+            showTopBar = true
+        }
+        "settings" -> {
+            showBottomBar = false
+            showTopBar = true
+        }
+        "scanFab" -> {
+            showBottomBar = false
+            showTopBar = true
+        }
+    }
+
     Scaffold(
-        topBar = { TopBar(navController = navController) },
-        bottomBar = { BottomBar(navController = navController) },
+        topBar = { if(showTopBar) TopBar(navController = navController) },
+        bottomBar = { if(showBottomBar) BottomBar(navController = navController) },
         floatingActionButton = { ScanFAB(
             navController = navController,
             scanFABState = floatingActionButtonState,
@@ -63,7 +101,8 @@ fun MainScreen(
     ) {
         it
         NavGraph(
-            navController = navController
+            navController = navController,
+            userViewModel = UserViewModel()
         )
     }
 }
