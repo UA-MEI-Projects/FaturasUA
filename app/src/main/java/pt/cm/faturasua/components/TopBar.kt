@@ -57,8 +57,11 @@ fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
             DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                 screens.forEach { screen ->
                     DropdownMenuItem(
-                        text = { screen.title },
-                        onClick = { navController.navigate(screen.route) },
+                        text = { Text(text= screen.title) },
+                        onClick = {
+                            navController.navigate(screen.route)
+                            menuExpanded = !menuExpanded
+                                  },
                         colors = MenuDefaults.itemColors(
                             textColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
