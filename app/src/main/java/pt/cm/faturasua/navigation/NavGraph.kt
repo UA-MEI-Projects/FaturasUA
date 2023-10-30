@@ -1,22 +1,36 @@
 package pt.cm.faturasua.navigation
 
+import android.content.Context
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import pt.cm.faturasua.components.BottomBarClass
-import pt.cm.faturasua.components.DropdownMenuClass
+import org.koin.androidx.compose.koinViewModel
+import pt.cm.faturasua.classes.BottomBarClass
+import pt.cm.faturasua.classes.DropdownMenuClass
+import pt.cm.faturasua.classes.ScanFABItemClass
 import pt.cm.faturasua.screens.DashboardScreen
 import pt.cm.faturasua.screens.HistoryScreen
 import pt.cm.faturasua.screens.ProfileScreen
+import pt.cm.faturasua.screens.ScanScreen
 import pt.cm.faturasua.screens.SettingsScreen
 import pt.cm.faturasua.screens.StatisticsScreen
+import pt.cm.faturasua.viewmodel.UserViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(
+    context: Context,
+    navController: NavHostController,
+    userViewModel: UserViewModel = koinViewModel(),
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarClass.History.route
+        startDestination = BottomBarClass.Dashboard.route,
+        modifier = modifier
     ) {
         composable(BottomBarClass.History.route){
             HistoryScreen()
@@ -31,7 +45,10 @@ fun NavGraph(navController: NavHostController) {
             ProfileScreen()
         }
         composable(DropdownMenuClass.Settings.route){
-            SettingsScreen()
+            SettingsScreen(context)
+        }
+        composable(ScanFABItemClass.Scan.route){
+            ScanScreen()
         }
     }
 }
