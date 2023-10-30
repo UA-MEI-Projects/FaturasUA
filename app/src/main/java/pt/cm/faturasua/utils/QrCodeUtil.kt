@@ -56,6 +56,7 @@ class QrCodeUtil(
         }
     }
 
+
     private fun ByteBuffer.toByteArray(): ByteArray{
         rewind()
         return ByteArray(remaining()).also {

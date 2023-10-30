@@ -30,6 +30,7 @@ import org.koin.core.context.startKoin
 import pt.cm.faturasua.screens.MainScreen
 import pt.cm.faturasua.screens.MapsScreen
 import pt.cm.faturasua.utils.AppModules
+import pt.cm.faturasua.utils.PreferencesManager
 import pt.cm.faturasua.utils.ReceiptNotificationService
 import pt.cm.faturasua.viewmodel.UserViewModel
 
@@ -54,6 +55,8 @@ class MainActivity : ComponentActivity() {
         val notificationManager=getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
 
+        val darkTheme = PreferencesManager(context = this)
+                          .getData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, false)
 
         fun toScanQRCodeActivity(){
             val intent = Intent(this, ScanActivity::class.java)
@@ -62,7 +65,9 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            FaturasUATheme {
+            FaturasUATheme(
+                darkTheme = darkTheme
+            ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

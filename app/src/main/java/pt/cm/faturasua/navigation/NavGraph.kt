@@ -1,5 +1,6 @@
 package pt.cm.faturasua.navigation
 
+import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavGraph(
+    context: Context,
     navController: NavHostController,
     userViewModel: UserViewModel = koinViewModel(),
     modifier: Modifier = Modifier
@@ -43,7 +45,7 @@ fun NavGraph(
             ProfileScreen()
         }
         composable(DropdownMenuClass.Settings.route){
-            SettingsScreen()
+            SettingsScreen(context)
         }
         composable(ScanFABItemClass.Scan.route){
             ScanScreen()
