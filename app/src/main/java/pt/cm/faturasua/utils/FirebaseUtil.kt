@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
 import pt.cm.faturasua.R
-import pt.cm.faturasua.data.Receipt
+import pt.cm.faturasua.data.Invoice
 import pt.cm.faturasua.viewmodel.UserViewModel
 import javax.inject.Inject
 
@@ -82,8 +82,8 @@ class FirebaseUtil  @Inject constructor (
         }
     }.stateIn(scope, SharingStarted.WhileSubscribed(), firebaseAuth.currentUser != null)
 
-    fun addReceiptToDB(receipt: Receipt){
-        dbReceiptsRef().child(receipt.receiptNumber).setValue(receipt)
+    fun addReceiptToDB(receipt: Invoice){
+        dbReceiptsRef().child(receipt.id).setValue(receipt)
     }
 
     fun receiptsListener(){
@@ -92,7 +92,7 @@ class FirebaseUtil  @Inject constructor (
         dbReceiptsRef()
             .addChildEventListener(object : ChildEventListener{
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    dummyModel.receiptsList.value!!.add(snapshot.getValue(Receipt::class.java)!!)
+                    dummyModel.receiptsList.value!!.add(snapshot.getValue(Invoice::class.java)!!)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
