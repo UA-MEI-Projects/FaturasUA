@@ -12,4 +12,8 @@ class UserViewModel: ViewModel() {
     val receiptsList: MutableLiveData<ArrayList<Receipt>> by lazy {
         MutableLiveData<ArrayList<Receipt>>()
     }
+
+    val darkThemePreference by lazy {
+        MutableLiveData<Boolean>(false)
+    }
 }

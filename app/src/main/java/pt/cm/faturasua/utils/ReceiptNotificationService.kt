@@ -25,6 +25,20 @@ class ReceiptNotificationService(
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.notify(Random.nextInt(), notification)
     }
+
+    fun sendReceiptErrorNotification(){
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_MSG_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Falha ao adicionar recibo.")
+            .setContentText("Não foi possível adicionar o seu recibo. Por favor, veja se tem conexão à internet.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            // Dissapears after clicking the notification
+            .setAutoCancel(true)
+            .build()
+
+        val notificationManager = context.getSystemService(NotificationManager::class.java)
+        notificationManager.notify(Random.nextInt(), notification)
+    }
     companion object{
         val NOTIFICATION_MSG_ID: String = "receipt_added_notification"
     }

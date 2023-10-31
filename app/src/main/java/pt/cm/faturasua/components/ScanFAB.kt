@@ -1,9 +1,11 @@
 package pt.cm.faturasua.components
 
-import android.content.Intent
-import android.graphics.fonts.FontStyle
+import android.content.Context
+import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.animation.core.animate
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -28,8 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,33 +38,60 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.LuminanceSource
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import kotlinx.coroutines.launch
-import pt.cm.faturasua.activity.MainActivity
 import pt.cm.faturasua.classes.ScanFABItemClass
 import pt.cm.faturasua.classes.ScanFABState
+import pt.cm.faturasua.utils.QrCodeUtil
 
 
 @Composable
 fun ScanFAB(
     modifier: Modifier = Modifier,
+    context: Context,
     navController: NavController,
     scanFABState: ScanFABState,
     onScanFabStateChange: (ScanFABState) -> Unit,
-    onScanSelected: () -> Unit
+    onPickGalleryCallback: () -> Unit
 ){
     val scope = rememberCoroutineScope()
 
     val items = listOf(
         ScanFABItemClass.Scan,
         ScanFABItemClass.AddImage
+    )
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                val intArray = IntArray(bitmap.getWidth() * bitmap.getHeight())
+                bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
+                val source: LuminanceSource =
+                    RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray)
+
+                val binaryBmp = BinaryBitmap(HybridBinarizer(source))
+                val qrCodeUtil = QrCodeUtil({result ->
+                    Log.d("QR Code Analysis", result)
+                })
+                qrCodeUtil.analyze(binaryBmp)
+
+                Log.d("PhotoPicker", "Selected URI: $uri")
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
     )
 
     val transition = updateTransition(targetState = scanFABState, label = "transition")
@@ -109,6 +136,7 @@ fun ScanFAB(
                                 Log.d("Navigation", "Navigate to Scan Screen")
                             }
                             ScanFABItemClass.AddImage.route -> {
+                                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                                 Log.d("Navigation", "Navigate to Scan-Add Image Screen")
                             }
                         }

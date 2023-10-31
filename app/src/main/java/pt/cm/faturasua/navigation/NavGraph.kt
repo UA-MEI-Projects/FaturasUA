@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.android.ext.android.get
 import pt.cm.faturasua.classes.BottomBarClass
 import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.classes.ScanFABItemClass
@@ -17,6 +18,7 @@ import pt.cm.faturasua.screens.ProfileScreen
 import pt.cm.faturasua.screens.ScanScreen
 import pt.cm.faturasua.screens.SettingsScreen
 import pt.cm.faturasua.screens.StatisticsScreen
+import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,9 +26,9 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 fun NavGraph(
     context: Context,
     navController: NavHostController,
-    userViewModel: UserViewModel = koinViewModel(),
     modifier: Modifier = Modifier
 ) {
+
     NavHost(
         navController = navController,
         startDestination = BottomBarClass.Dashboard.route,

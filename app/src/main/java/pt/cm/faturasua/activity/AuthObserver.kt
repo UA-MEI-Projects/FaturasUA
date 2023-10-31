@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -16,6 +17,7 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.compose.getKoinScope
 import pt.cm.faturasua.utils.FirebaseUtil
 import javax.inject.Inject
 
@@ -33,9 +35,7 @@ class AuthObserver @Inject constructor(
         val activityResultRegistry = (activity as ComponentActivity).activityResultRegistry
 
         owner.lifecycleScope.launch {
-            owner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-            }
+            _isUserSignedIn.value = firebaseUtil.isUserSignedIn(this).value
         }
 
         activityResultLauncher = activityResultRegistry.register(
@@ -44,8 +44,11 @@ class AuthObserver @Inject constructor(
         ) { res ->
             owner.lifecycle.coroutineScope.launch {
                 firebaseUtil.onSignInResult(res)
+                _isUserSignedIn.value = firebaseUtil.isUserSignedIn(this).value
             }
         }
+
+
     }
 
     fun onSignUp(){
@@ -58,5 +61,7 @@ class AuthObserver @Inject constructor(
 
     suspend fun onSignOut() {
         firebaseUtil.onSignOutRequest(activity as ComponentActivity)
+        _isUserSignedIn.value = false
+
     }
 }

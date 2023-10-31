@@ -1,6 +1,7 @@
 package pt.cm.faturasua.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -20,13 +21,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import pt.cm.faturasua.classes.DropdownMenuClass
+import pt.cm.faturasua.utils.FirebaseUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
+fun TopBar(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onSignOutCallback: () -> Unit
+) {
     val scope = rememberCoroutineScope()
+    val firebaseUtil:FirebaseUtil = koinInject()
 
     var menuExpanded by remember{
         mutableStateOf(false)
@@ -34,9 +44,9 @@ fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
 
     val screens = listOf(
         DropdownMenuClass.Profile,
-        DropdownMenuClass.Settings,
-        DropdownMenuClass.LogOut
+        DropdownMenuClass.Settings
     )
+
 
     TopAppBar(title = {
         Text(text = "FaturasUA", color = Color.White)
@@ -45,6 +55,18 @@ fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
+        navigationIcon = {
+            if (navController.previousBackStackEntry != null){
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            } else {
+                null
+            }
+        },
         actions = {
             IconButton(onClick = { menuExpanded = !menuExpanded}) {
                 Icon(
@@ -59,6 +81,7 @@ fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
                     DropdownMenuItem(
                         text = { Text(text= screen.title) },
                         onClick = {
+
                             navController.navigate(screen.route)
                             menuExpanded = !menuExpanded
                                   },
@@ -68,6 +91,17 @@ fun TopBar(navController: NavController, modifier : Modifier = Modifier) {
                         )
                     )
                 }
+                DropdownMenuItem(
+                    text = { Text(text= "Log Out") },
+                    onClick = {
+                        onSignOutCallback()
+                        menuExpanded = !menuExpanded
+                    },
+                    colors = MenuDefaults.itemColors(
+                        textColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                )
             }
         },
         modifier = modifier

@@ -57,14 +57,14 @@ class FirebaseUtil  @Inject constructor (
         val signInIntent = authUI
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
-//            .setLogo(R.drawable.zypho_logo)
+            .setLogo(R.mipmap.ic_launcher)
             .setTheme(R.style.Theme_FaturasUA)
             .build()
 
         return signInIntent
     }
 
-    suspend fun onSignOutRequest(activity : Context){
+    fun onSignOutRequest(activity : Context){
         try{
             authUI.signOut(activity)
         }catch (e :Exception){

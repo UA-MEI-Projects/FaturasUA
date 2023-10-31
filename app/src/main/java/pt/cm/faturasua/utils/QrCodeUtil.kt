@@ -21,6 +21,23 @@ class QrCodeUtil(
         ImageFormat.YUV_444_888
     )
 
+    fun analyze(binaryBitmap: BinaryBitmap){
+        try {
+            val result = MultiFormatReader().apply {
+                setHints(
+                    mapOf(
+                        DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
+                            BarcodeFormat.QR_CODE
+                        )
+                    )
+                )
+            }.decode(binaryBitmap)
+            onQrCodeScanned(result.text)
+        }catch (e :Exception){
+            e.printStackTrace()
+        }
+    }
+
     override fun analyze(image: ImageProxy) {
         if(image.format in supportedImageFormats){
             val bytes = image.planes.first().buffer.toByteArray()
@@ -37,22 +54,8 @@ class QrCodeUtil(
             )
 
             val binaryBmp = BinaryBitmap(HybridBinarizer(source))
-            try {
-                val result = MultiFormatReader().apply {
-                    setHints(
-                        mapOf(
-                            DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                                BarcodeFormat.QR_CODE
-                            )
-                        )
-                    )
-                }.decode(binaryBmp)
-                onQrCodeScanned(result.text)
-            }catch (e :Exception){
-                e.printStackTrace()
-            }finally {
-                image.close()
-            }
+            analyze(binaryBmp)
+            image.close()
         }
     }
 

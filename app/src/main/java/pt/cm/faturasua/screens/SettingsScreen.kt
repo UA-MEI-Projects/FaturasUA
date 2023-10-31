@@ -1,9 +1,7 @@
 package pt.cm.faturasua.screens
 
 import android.content.Context
-import android.widget.ToggleButton
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FilledIconToggleButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,12 +27,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.FaturasUATheme
+import org.koin.androidx.compose.koinViewModel
 import pt.cm.faturasua.utils.PreferencesManager
+import pt.cm.faturasua.viewmodel.UserViewModel
 
 
 @Composable
 fun SettingsScreen(
-    context: Context
+    context: Context,
+    userViewModel: UserViewModel = koinViewModel()
 ){
     val preferencesManager = remember{ PreferencesManager(context)}
     var darkModeOn by remember {
@@ -48,7 +46,8 @@ fun SettingsScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(20.dp)
     ) {
 
@@ -57,6 +56,7 @@ fun SettingsScreen(
             value = darkModeOn,
             onCheckedChange = {
                 darkModeOn = !darkModeOn
+                userViewModel.darkThemePreference.value = darkModeOn
                 preferencesManager.saveData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, darkModeOn)
             }
         )

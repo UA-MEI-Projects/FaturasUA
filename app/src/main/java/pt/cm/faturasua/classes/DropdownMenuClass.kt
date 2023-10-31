@@ -6,16 +6,11 @@ sealed class DropdownMenuClass(
 ) {
     object Profile: DropdownMenuClass(
         route = "profile",
-        title = "profile"
+        title = "Profile"
     )
 
     object Settings: DropdownMenuClass(
         route = "settings",
-        title = "settings"
-    )
-
-    object LogOut : DropdownMenuClass(
-        route = "logout",
-        title = "logout"
+        title = "Settings"
     )
 }
