@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Preview
 @Composable
@@ -51,7 +53,7 @@ fun HistoryScreen(){
         InvoiceCard(id = 3, number = "FS 06030652201010619/015229", title = "LEVANTAMENTO MULTIBANCO", amount = 51.5, date = "20220222", nif = 509441130, iva = 1.66)
         InvoiceCard(id = 4, number = "FS 06030652201010619/015229", title = "COMPRA QUIOSQUE", amount = 99.99, date = "20220223", nif = 509441130, iva = 1.66)
         InvoiceCard(id = 5, number = "FS 06030652201010619/015229", title = "COMPRA RAMONA", amount = 4.2, date = "20220224", nif = 509441130, iva = 1.66)
-        InvoiceCard(id = 6, number = "FS 06030652201010619/015229", title = "COMPRA GLICINIAS PLAZA", amount = 4.2, date = "20230230", nif = 509441130, iva = 1.66)
+        InvoiceCard(id = 6, number = "FS 06030652201010619/015229", title = "COMPRA GLICINIAS PLAZA", amount = 4.2, date = "20230227", nif = 509441130, iva = 1.66)
         InvoiceCard(id = 7, number = "FS 06030652201010619/015229", title = "COMPRA TEXTO EXTREMAMENTE LARGO OVERFLOW", amount = 111.69, date = "20230720", nif = 509441130, iva = 1.66)
     }
 }
@@ -83,12 +85,9 @@ fun InvoiceCard(id: Int, number: String, title: String, amount: Number, date: St
                     .fillMaxWidth()
             ) {
                 Column {
-                    var year : String = date.substring(startIndex = 0, endIndex = 4)
-                    var month : String = date.substring(startIndex = 4, endIndex = 6)
-                    var day : String = date.substring(startIndex = 6, endIndex = 8)
-
                     Text(
-                        text = "$day/$month/$year",
+                        text = LocalDate.parse(date, DateTimeFormatter.BASIC_ISO_DATE).format(
+                            DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                         style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.padding(horizontal = 5.dp),
                         color = MaterialTheme.colorScheme.tertiary,
@@ -126,8 +125,7 @@ fun InvoiceCard(id: Int, number: String, title: String, amount: Number, date: St
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                 )
-                // TODO: Perceber porque é que a operação de diferença dá erro se não forem inteiros
-                var value : Number = (amount.toInt() - iva.toInt())
+                var value : Number = (amount.toDouble() -  iva.toDouble())
                 Text(
                     text = "Valor líquido (sem IVA): ${formatPrice(value)}€",
                     style = MaterialTheme.typography.bodyMedium,
@@ -143,12 +141,14 @@ fun InvoiceCard(id: Int, number: String, title: String, amount: Number, date: St
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                 )
+                // TODO: Hardcoded timestamp
+                val formatTimestamp = LocalDate.parse("2023-10-31T19:06:14.963943308", DateTimeFormatter.ISO_DATE_TIME).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) // TODO: Added time (HH:mm:ss), careful with timezones
+                Text(
+                    text = "Digitalizada em: $formatTimestamp",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                )
             }
         }
     }
-}
-
-fun formatPrice(price: Number): String {
-    val decimalFormat = DecimalFormat("#,##0.00")
-    return decimalFormat.format(price)
 }
