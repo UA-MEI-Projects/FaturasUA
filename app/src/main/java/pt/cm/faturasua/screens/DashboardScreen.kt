@@ -43,6 +43,27 @@ fun DashboardScreen() {
         )
         DashboardGreeting()
 
+        Card(
+            //onClick = { true },
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.inversePrimary,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            // TODO: Get the tax number (NIF) dynamically from the DB
+            val taxNumber : Number = 248239230
+            Text(
+                text = "Your tax number: ${taxNumber.toString().chunked(3).joinToString(separator = " ")}",
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(10.dp)
+            )
+        }
+
         // Overview of invoices per sector
         InvoiceCard(icon = Icons.Rounded.Home, color = MaterialTheme.colorScheme.tertiaryContainer, category = "gerais", title = "Despesas Gerais", amount = 6251.11)
         InvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.secondaryContainer, category = "alimentacao", title = "Alimentação", amount = 800.34)
