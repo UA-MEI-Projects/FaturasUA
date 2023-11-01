@@ -28,7 +28,9 @@ class ParsingUtil {
             return false
         }
 
-        val invoice = Invoice(id = number!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF, date = date!!, iva = iva!!, amount = amount!!)
+        // TODO: Ask user to given a little description for invoice, after scanning/uploading when confirming if invoice details are all OK
+        val title = "NAME GIVEN BY THE USERNAME TO BETTER IDENTIFY THE INVOICE"
+        val invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
         println()
         println("number:\t\t$number")
