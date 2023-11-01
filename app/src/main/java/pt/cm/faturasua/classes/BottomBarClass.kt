@@ -19,7 +19,7 @@ sealed class BottomBarClass(
 
     object Dashboard : BottomBarClass(
         route = "dashboard",
-        title = "dashboard",
+        title = "Dashboard",
         icon = Icons.Default.Home
     )
 
