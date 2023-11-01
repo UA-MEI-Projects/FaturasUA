@@ -3,7 +3,7 @@ package pt.cm.faturasua.utils
 import pt.cm.faturasua.data.Invoice
 
 class ParsingUtil {
-    fun parseQR(qrCode : String) : Boolean {
+    fun parseQR(qrCode : String) : Invoice {
         val fields : List<String> = qrCode.split("*")
 
         println(fields)
@@ -17,20 +17,31 @@ class ParsingUtil {
         val iva : String? = parseField(fields, "N:")
         val amount : String? = parseField(fields, "O:")
 
+        var invoice = Invoice(
+            id = "",
+            title = "",
+            type = "",
+            businessNIF = "",
+            customerNIF = "",
+            date = "",
+            iva = "",
+            amount = ""
+        )
+
         if (listOf(number, type, businessNIF, customerNIF, date, iva, amount).any { it == null }) {
             println("ERRO: O código QR lido não é uma fatura válida. Por favor tente com outro documento.")
-            return false
+            return invoice
         }
 
         // TODO: Get customer NIF dynamically from DB (hardcoded for now)
         if (customerNIF != "509441130") {
             println("ERRO: A fatura lida não foi emitida com o seu número de contribuinte (NIF) e, portanto, não pode ser adicionada à sua conta.")
-            return false
+            return invoice
         }
 
         // TODO: Ask user to given a little description for invoice, after scanning/uploading when confirming if invoice details are all OK
         val title = "NAME GIVEN BY THE USERNAME TO BETTER IDENTIFY THE INVOICE"
-        val invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
+        invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
         println()
         println("number:\t\t$number")
@@ -41,7 +52,7 @@ class ParsingUtil {
         println("iva:\t\t$iva€")
         println("amount:\t\t$amount€")
 
-        return true
+        return invoice
     }
 
     private fun parseField(fields : List<String>, header : String) : String? {

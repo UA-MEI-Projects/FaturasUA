@@ -3,10 +3,8 @@ package pt.cm.faturasua.activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,23 +26,13 @@ import pt.cm.faturasua.utils.AppModules
 import pt.cm.faturasua.utils.PreferencesManager
 import pt.cm.faturasua.utils.ReceiptNotificationService
 import pt.cm.faturasua.viewmodel.UserViewModel
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import org.koin.android.ext.android.get
+import pt.cm.faturasua.utils.FirebaseUtil
 
 
 class MainActivity : ComponentActivity() {
-
-    val pickPhotoFromGallery = {
-        val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
-        pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-    }
+    private val userViewModel:UserViewModel by viewModel()
+    private val firebaseUtil:FirebaseUtil = get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +41,6 @@ class MainActivity : ComponentActivity() {
             androidContext(this@MainActivity)
             modules(AppModules)
         }
-
-        val userViewModel:UserViewModel by viewModel()
 
         val authObserver:AuthObserver by inject { parametersOf(this@MainActivity) }
         this.lifecycle.addObserver(authObserver)
@@ -67,10 +53,16 @@ class MainActivity : ComponentActivity() {
         val notificationManager=getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
 
-        userViewModel.darkThemePreference.value = PreferencesManager(context = this)
-                          .getData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, false)
+        userViewModel.darkThemePreference.setValue(PreferencesManager(context = this)
+                          .getData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, false))
 
+        userViewModel.darkThemePreference.observe(this){
+            recreate()
+        }
 
+        val receiptNotificationService = ReceiptNotificationService(this)
+
+        firebaseUtil.receiptsListener(receiptNotificationService)
 
         setContent {
             FaturasUATheme(
@@ -84,11 +76,17 @@ class MainActivity : ComponentActivity() {
                     val scope = rememberCoroutineScope()
                     val isUserSignedIn = authObserver.isUserSignedIn.collectAsState().value
                     if(isUserSignedIn){
+                        try {
+                            userViewModel.name.setValue(firebaseUtil.user.displayName)
+                        }catch (e :Exception){
+                            e.printStackTrace()
+                        }
+
+
                         MainScreen(
                             onSignOut = {
                                 scope.launch { authObserver.onSignOut() }
-                            },
-                            onGallerySelect = pickPhotoFromGallery
+                            }
                         )
                     }
                     else{

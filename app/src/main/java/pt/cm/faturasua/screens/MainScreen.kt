@@ -24,8 +24,7 @@ import kotlin.reflect.KFunction0
 
 @Composable
 fun MainScreen(
-    onSignOut: () -> Unit,
-    onGallerySelect: () -> Unit
+    onSignOut: () -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -89,8 +88,7 @@ fun MainScreen(
             scanFABState = floatingActionButtonState,
             onScanFabStateChange = {
                 floatingActionButtonState = it
-            },
-            onPickGalleryCallback = onGallerySelect
+            }
         )}
     ) {
         it

@@ -13,7 +13,7 @@ val AppModules = module{
     single { FirebaseAuth.getInstance()}
     single { AuthUI.getInstance()}
     single { FirebaseDatabase.getInstance()}
-    single { FirebaseUtil(get(), get(), get()) }
+    single { FirebaseUtil(get(), get(), get(), get()) }
     factory { (activityContext : Context) ->
         AuthObserver(activityContext, get())
     }

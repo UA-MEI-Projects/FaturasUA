@@ -59,8 +59,7 @@ fun ScanFAB(
     context: Context,
     navController: NavController,
     scanFABState: ScanFABState,
-    onScanFabStateChange: (ScanFABState) -> Unit,
-    onPickGalleryCallback: () -> Unit
+    onScanFabStateChange: (ScanFABState) -> Unit
 ){
     val scope = rememberCoroutineScope()
 

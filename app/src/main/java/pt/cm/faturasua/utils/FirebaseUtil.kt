@@ -5,11 +5,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
-import com.firebase.ui.auth.data.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,10 +27,11 @@ import javax.inject.Inject
 class FirebaseUtil  @Inject constructor (
     val authUI: AuthUI,
     val firebaseAuth: FirebaseAuth,
-    val firebaseDatabase: FirebaseDatabase
+    val firebaseDatabase: FirebaseDatabase,
+    val userViewModel: UserViewModel
 ){
     private lateinit var databaseReference: DatabaseReference
-
+    lateinit var user: FirebaseUser
     val dbReceiptsRef = {
         databaseReference = firebaseDatabase.getReference()
         databaseReference.child("users").child(firebaseAuth.currentUser!!.uid)
@@ -41,10 +41,8 @@ class FirebaseUtil  @Inject constructor (
         val response = result.idpResponse
         if (result.resultCode == Activity.RESULT_OK){
             Log.d(ContentValues.TAG, "Successfully signed in correctly")
-            val user = firebaseAuth.currentUser
-            user?.let {
-
-            }
+            user = firebaseAuth.currentUser!!
+            userViewModel.name.setValue(user.displayName)
         }
 
     }
@@ -86,13 +84,13 @@ class FirebaseUtil  @Inject constructor (
         dbReceiptsRef().child(receipt.id).setValue(receipt)
     }
 
-    fun receiptsListener(){
-        var dummyModel = UserViewModel()
-
+    fun receiptsListener(notificationCallback: ReceiptNotificationService){
         dbReceiptsRef()
             .addChildEventListener(object : ChildEventListener{
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    dummyModel.receiptsList.value!!.add(snapshot.getValue(Invoice::class.java)!!)
+
+                    userViewModel.receiptsList.value!!.add(snapshot.getValue(Invoice::class.java)!!)
+                    notificationCallback.sendReceiptAddedNotification()
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -108,7 +106,7 @@ class FirebaseUtil  @Inject constructor (
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    notificationCallback.sendReceiptErrorNotification()
                 }
 
             })

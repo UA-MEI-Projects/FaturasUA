@@ -37,9 +37,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import pt.cm.faturasua.utils.FirebaseUtil
+import pt.cm.faturasua.utils.ParsingUtil
 import pt.cm.faturasua.utils.QrCodeUtil
 import pt.cm.faturasua.utils.ReceiptNotificationService
+import pt.cm.faturasua.viewmodel.UserViewModel
 
 @ExperimentalMaterial3Api
 @Composable
@@ -47,6 +51,11 @@ fun ScanScreen(){
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val firebaseUtil = koinInject<FirebaseUtil>()
+    val userViewModel = koinViewModel<UserViewModel>()
+
+
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
     }
@@ -106,6 +115,7 @@ fun ScanScreen(){
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
                         qrCode = result
+                        ParsingUtil().parseQR(result)
                         scope.launch {
                             sheetState.expand()
                             showBottomSheet = true

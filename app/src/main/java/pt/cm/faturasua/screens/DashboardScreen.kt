@@ -24,10 +24,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.koin.androidx.compose.koinViewModel
+import pt.cm.faturasua.viewmodel.UserViewModel
+import pt.cm.faturasua.components.DashboardInvoiceCard
 
 @Preview
 @Composable
 fun DashboardScreen() {
+    val userViewModel:UserViewModel = koinViewModel()
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -41,7 +45,9 @@ fun DashboardScreen() {
             fontSize = 30.sp,
             color = Color.Black
         )
-        DashboardGreeting()
+        DashboardGreeting(
+            username = userViewModel.name.value.toString()
+        )
 
         Card(
             //onClick = { true },
@@ -65,67 +71,18 @@ fun DashboardScreen() {
         }
 
         // Overview of invoices per sector
-        InvoiceCard(icon = Icons.Rounded.Home, color = MaterialTheme.colorScheme.tertiaryContainer, category = "gerais", title = "Despesas Gerais", amount = 6251.11)
-        InvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.secondaryContainer, category = "alimentacao", title = "Alimentação", amount = 800.34)
-        InvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.background, category = "educacao", title = "Educação", amount = 1486.09)
-        InvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.errorContainer, category = "saude", title = "Saúde", amount = 67.67)
-        InvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.surface, category = "imoveis", title = "Imóveis", amount = 342.24)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InvoiceCard(icon: ImageVector, color: Color, category: String, title: String, amount: Number) {
-    Card(
-        //onClick = { true },
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = color,
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Icon(
-                    icon,
-                    contentDescription = "Icon",
-                    modifier = Modifier.padding(5.dp),
-                )
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier
-                        .padding(horizontal = 15.dp, vertical = 5.dp)
-                        .weight(1f)
-                )
-                Text(
-                    text = "${formatPrice(amount)}€",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(5.dp),
-                    textAlign = TextAlign.Right,
-                )
-            }
-        }
+        DashboardInvoiceCard(icon = Icons.Rounded.Home, color = MaterialTheme.colorScheme.tertiaryContainer, category = "gerais", title = "Despesas Gerais", amount = 6251.11)
+        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.secondaryContainer, category = "alimentacao", title = "Alimentação", amount = 800.34)
+        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.background, category = "educacao", title = "Educação", amount = 1486.09)
+        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.errorContainer, category = "saude", title = "Saúde", amount = 67.67)
+        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.surface, category = "imoveis", title = "Imóveis", amount = 342.24)
     }
 }
 
 @Composable
-fun DashboardGreeting(){
+fun DashboardGreeting(
+    username: String
+){
     val hour : Int = Calendar.getInstance()[Calendar.HOUR_OF_DAY]
     val greeting : String = if (hour >= 20) {
         "Good night,"
@@ -136,7 +93,7 @@ fun DashboardGreeting(){
     } else {
         "Go to sleep,"
     }
-    val user : String = "Username" // TODO: Fetch username from Google auth
+    val user : String = username // TODO: Fetch username from Google auth
     Text("$greeting $user!")
 }
 

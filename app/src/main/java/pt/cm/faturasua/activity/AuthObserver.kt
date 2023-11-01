@@ -13,12 +13,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.compose.getKoinScope
 import pt.cm.faturasua.utils.FirebaseUtil
+import pt.cm.faturasua.viewmodel.UserViewModel
 import javax.inject.Inject
 
 class AuthObserver @Inject constructor(

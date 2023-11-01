@@ -6,7 +6,7 @@ import pt.cm.faturasua.data.Invoice
 
 class UserViewModel: ViewModel() {
     val name: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+        MutableLiveData<String>("")
     }
 
     val receiptsList: MutableLiveData<ArrayList<Invoice>> by lazy {
