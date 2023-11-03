@@ -121,13 +121,13 @@ fun ExpandedMenu(
     if(signUp){
         OutlinedTextField(
             value = username,
-            label = { Text(text = "Email") },
+            label = { Text(text = "Name") },
             onValueChange = { username = it }
         )
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             value = phoneNumber,
-            label = { Text(text = "Phone Number") },
+            label = { Text(text = "Phone number") },
             onValueChange = { phoneNumber = it }
         )
         Spacer(modifier = Modifier.size(10.dp))
