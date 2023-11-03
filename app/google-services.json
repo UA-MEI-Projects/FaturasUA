@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "298111324274",
+    "firebase_url": "https://faturasua-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "faturasua",
     "storage_bucket": "faturasua.appspot.com"
   },

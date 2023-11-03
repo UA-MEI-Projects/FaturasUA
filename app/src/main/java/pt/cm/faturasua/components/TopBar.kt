@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.utils.FirebaseUtil
 
@@ -32,11 +31,11 @@ import pt.cm.faturasua.utils.FirebaseUtil
 @Composable
 fun TopBar(
     navController: NavController,
+    firebaseUtil: FirebaseUtil,
     modifier: Modifier = Modifier,
     onSignOutCallback: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val firebaseUtil:FirebaseUtil = koinInject()
 
     var menuExpanded by remember{
         mutableStateOf(false)

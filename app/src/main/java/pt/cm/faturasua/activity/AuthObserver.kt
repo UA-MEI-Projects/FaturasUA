@@ -12,16 +12,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.compose.getKoinScope
 import pt.cm.faturasua.utils.FirebaseUtil
-import javax.inject.Inject
 
-class AuthObserver @Inject constructor(
+class AuthObserver(
     private val activity: Context,
     private val firebaseUtil: FirebaseUtil
 ): DefaultLifecycleObserver {
@@ -32,35 +29,24 @@ class AuthObserver @Inject constructor(
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        val activityResultRegistry = (activity as ComponentActivity).activityResultRegistry
 
         owner.lifecycleScope.launch {
             _isUserSignedIn.value = firebaseUtil.isUserSignedIn(this).value
         }
 
-        activityResultLauncher = activityResultRegistry.register(
-            FirebaseUtil.SIGN_UP_CODE,owner,
-            FirebaseAuthUIActivityResultContract(),
-        ) { res ->
-            owner.lifecycle.coroutineScope.launch {
-                firebaseUtil.onSignInResult(res)
-                _isUserSignedIn.value = firebaseUtil.isUserSignedIn(this).value
-            }
-        }
+    }
 
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
+        val currentUser = firebaseUtil.firebaseAuth.currentUser
+        if (currentUser != null) {
+
+        }
 
     }
 
-    fun onSignUp(){
-        try {
-            activityResultLauncher.launch(firebaseUtil.themeAndLogo())
-        }catch (e :Exception){
-            Log.d("SIGN IN", e.message.toString())
-        }
-    }
 
     suspend fun onSignOut() {
-        firebaseUtil.onSignOutRequest(activity as ComponentActivity)
         _isUserSignedIn.value = false
 
     }
