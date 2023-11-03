@@ -35,10 +35,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
+import pt.cm.faturasua.components.InvoiceCardDetailInfo
+import pt.cm.faturasua.data.Invoice
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.utils.ParsingUtil
 import pt.cm.faturasua.utils.QrCodeUtil
@@ -47,13 +48,14 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 
 @ExperimentalMaterial3Api
 @Composable
-fun ScanScreen(){
+fun ScanScreen(
+    userViewModel: UserViewModel = viewModel(),
+    firebaseUtil: FirebaseUtil
+){
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val firebaseUtil = koinInject<FirebaseUtil>()
-    val userViewModel = koinViewModel<UserViewModel>()
 
 
     val cameraProviderFuture = remember{
@@ -63,7 +65,7 @@ fun ScanScreen(){
         mutableStateOf(false)
     }
     var qrCode by remember{
-        mutableStateOf("")
+        mutableStateOf(Invoice())
     }
     val sheetState = rememberModalBottomSheetState()
     var hasCameraPermission by remember{
@@ -114,12 +116,17 @@ fun ScanScreen(){
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
-                        qrCode = result
-                        ParsingUtil().parseQR(result)
-                        scope.launch {
-                            sheetState.expand()
-                            showBottomSheet = true
-                            receiptNotificationService.sendReceiptAddedNotification()
+                        val invoice  = ParsingUtil().parseQR(result)
+                        if(invoice != null){
+                            qrCode = invoice
+                            scope.launch {
+                                sheetState.expand()
+                                showBottomSheet = true
+                                firebaseUtil.addReceiptToDB(invoice)
+                            }
+                        }
+                        else{
+                            receiptNotificationService.sendReceiptErrorFormatNotification()
                         }
                     }
                 )
@@ -146,7 +153,16 @@ fun ScanScreen(){
                     modifier = Modifier.padding(20.dp)
                 ){
                     Column {
-                        Text(qrCode)
+                        InvoiceCardDetailInfo(
+                            type = qrCode.type,
+                            number = qrCode.id,
+                            title = qrCode.title,
+                            amount = qrCode.amount.toDouble(),
+                            date = qrCode.date,
+                            nif = qrCode.businessNIF.toInt(),
+                            iva = qrCode.iva.toDouble(),
+                            status = qrCode.status
+                        )
                         MapsScreen(pos = LatLng( 19.98556, 23.37066))
                     }
                     

@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.FaturasUATheme
-import org.koin.androidx.compose.koinViewModel
 import pt.cm.faturasua.utils.PreferencesManager
 import pt.cm.faturasua.viewmodel.UserViewModel
 
@@ -35,7 +35,7 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 @Composable
 fun SettingsScreen(
     context: Context,
-    userViewModel: UserViewModel = koinViewModel()
+    userViewModel: UserViewModel = viewModel()
 ){
     val preferencesManager = remember{ PreferencesManager(context)}
     var darkModeOn by remember {
@@ -66,6 +66,7 @@ fun SettingsScreen(
             value = notifOn,
             onCheckedChange = {
                 notifOn = !notifOn
+                userViewModel.notifsOn.setValue(notifOn)
                 preferencesManager.saveData(PreferencesManager.PREFERENCE_CODE_NOTIFICATIONS, notifOn)
 
             }

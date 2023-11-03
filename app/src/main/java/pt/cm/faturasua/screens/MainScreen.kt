@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pt.cm.faturasua.classes.ScanFABState
@@ -20,11 +21,15 @@ import pt.cm.faturasua.components.BottomBar
 import pt.cm.faturasua.components.ScanFAB
 import pt.cm.faturasua.components.TopBar
 import pt.cm.faturasua.navigation.NavGraph
+import pt.cm.faturasua.utils.FirebaseUtil
+import pt.cm.faturasua.viewmodel.UserViewModel
 import kotlin.reflect.KFunction0
 
 @Composable
 fun MainScreen(
-    onSignOut: () -> Unit
+    firebaseUtil: FirebaseUtil,
+    onSignOut: () -> Unit,
+    userViewModel: UserViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -79,7 +84,8 @@ fun MainScreen(
     Scaffold(
         topBar = { if(showTopBar) TopBar(
             navController = navController,
-            onSignOutCallback = onSignOut
+            onSignOutCallback = onSignOut,
+            firebaseUtil = firebaseUtil
         ) },
         bottomBar = { if(showBottomBar) BottomBar(navController = navController) },
         floatingActionButton = { if(showFAB) ScanFAB(
@@ -94,7 +100,9 @@ fun MainScreen(
         it
         NavGraph(
             context = LocalContext.current,
+            firebaseUtil = firebaseUtil,
             navController = navController,
+            userViewModel = userViewModel,
             modifier = Modifier
                 .padding(it)
         )

@@ -3,11 +3,8 @@ package pt.cm.faturasua.utils
 import pt.cm.faturasua.data.Invoice
 
 class ParsingUtil {
-    fun parseQR(qrCode : String) : Invoice {
+    fun parseQR(qrCode : String) : Invoice? {
         val fields : List<String> = qrCode.split("*")
-
-        println(fields)
-        println("Number of fields: " + fields.size)
 
         val number : String? = parseField(fields, "G:")
         val type : String? = parseField(fields, "D:")
@@ -17,40 +14,30 @@ class ParsingUtil {
         val iva : String? = parseField(fields, "N:")
         val amount : String? = parseField(fields, "O:")
 
-        var invoice = Invoice(
-            id = "",
-            title = "",
-            type = "",
-            businessNIF = "",
-            customerNIF = "",
-            date = "",
-            iva = "",
-            amount = ""
-        )
 
         if (listOf(number, type, businessNIF, customerNIF, date, iva, amount).any { it == null }) {
-            println("ERRO: O código QR lido não é uma fatura válida. Por favor tente com outro documento.")
-            return invoice
+            System.out.println("ERRO: O código QR lido não é uma fatura válida. Por favor tente com outro documento.")
+            return null
         }
 
         // TODO: Get customer NIF dynamically from DB (hardcoded for now)
-        if (customerNIF != "509441130") {
-            println("ERRO: A fatura lida não foi emitida com o seu número de contribuinte (NIF) e, portanto, não pode ser adicionada à sua conta.")
-            return invoice
-        }
+/*        if (customerNIF != "509441130") {
+            System.out.println("ERRO: A fatura lida não foi emitida com o seu número de contribuinte (NIF) e, portanto, não pode ser adicionada à sua conta.")
+            return null
+        }*/
 
         // TODO: Ask user to given a little description for invoice, after scanning/uploading when confirming if invoice details are all OK
         val title = "NAME GIVEN BY THE USERNAME TO BETTER IDENTIFY THE INVOICE"
-        invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
+        var invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
-        println()
-        println("number:\t\t$number")
-        println("type:\t\t$type")
-        println("businessNIF:\t$businessNIF")
-        println("customerNIF:\t$customerNIF")
-        println("date:\t\t$date")
-        println("iva:\t\t$iva€")
-        println("amount:\t\t$amount€")
+        System.out.println()
+        System.out.println("number:\t\t$number")
+        System.out.println("type:\t\t$type")
+        System.out.println("businessNIF:\t$businessNIF")
+        System.out.println("customerNIF:\t$customerNIF")
+        System.out.println("date:\t\t$date")
+        System.out.println("iva:\t\t$iva€")
+        System.out.println("amount:\t\t$amount€")
 
         return invoice
     }

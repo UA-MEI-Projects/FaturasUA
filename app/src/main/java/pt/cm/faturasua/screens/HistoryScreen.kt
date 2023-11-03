@@ -13,19 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import org.koin.androidx.compose.get
-import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
+import androidx.lifecycle.viewmodel.compose.viewModel
 import pt.cm.faturasua.components.InvoiceCard
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.viewmodel.UserViewModel
 
-@Preview
+
 @Composable
-fun HistoryScreen(){
+fun HistoryScreen(
+    userViewModel: UserViewModel = viewModel(),
+    firebaseUtil: FirebaseUtil
+){
     val scrollState = rememberScrollState()
-    val firebaseUtil = koinInject<FirebaseUtil>()
-    val userViewModel = koinViewModel<UserViewModel>()
     Column(
         modifier = Modifier
             .fillMaxSize()

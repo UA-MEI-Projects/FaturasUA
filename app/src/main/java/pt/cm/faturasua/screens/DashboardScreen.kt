@@ -24,14 +24,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.androidx.compose.koinViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import pt.cm.faturasua.viewmodel.UserViewModel
 import pt.cm.faturasua.components.DashboardInvoiceCard
 
 @Preview
 @Composable
-fun DashboardScreen() {
-    val userViewModel:UserViewModel = koinViewModel()
+fun DashboardScreen(
+    userViewModel: UserViewModel = viewModel()
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -93,7 +94,7 @@ fun DashboardGreeting(
     } else {
         "Go to sleep,"
     }
-    val user : String = username // TODO: Fetch username from Google auth
+    val user : String = username
     Text("$greeting $user!")
 }
 

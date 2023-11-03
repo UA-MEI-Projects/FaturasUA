@@ -19,8 +19,6 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 2.dp)
     )
-    // TODO: Hardcoded type (for now)
-    val type = "FS"
     var formatType : String = type
     when (type) {
         "OR" -> formatType = "Orçamento"
