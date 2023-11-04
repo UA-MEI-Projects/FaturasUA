@@ -161,7 +161,7 @@ fun ScanFAB(
 
             },
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape
         ) {
             Icon(
@@ -192,7 +192,7 @@ fun ScanFABItem(
            Text(
                text = item.label,
                fontWeight = FontWeight.Bold,
-               fontSize = 12.sp,
+               fontSize = 13.sp,
                modifier = Modifier
                    .alpha(
                        animateFloatAsState(
@@ -202,7 +202,7 @@ fun ScanFABItem(
                    )
                    .shadow(textShadow)
                    .background(MaterialTheme.colorScheme.background)
-                   .padding(start = 6.dp, top = 4.dp, end = 6.dp)
+                   .padding(10.dp)
            )
 
            Spacer(modifier = Modifier.size(16.dp))

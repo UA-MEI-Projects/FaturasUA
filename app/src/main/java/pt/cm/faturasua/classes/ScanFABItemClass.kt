@@ -15,13 +15,13 @@ sealed class ScanFABItemClass(
 ){
     object Scan : ScanFABItemClass(
         iconId = R.drawable.ic_launcher_foreground,
-        label = "Scan",
+        label = "Scan invoice",
         route = "scanFab"
     )
 
     object AddImage : ScanFABItemClass(
         iconId = R.drawable.ic_launcher_foreground,
-        label = "Add Image",
+        label = "Upload invoice",
         route = "addImageFab"
     )
 }
