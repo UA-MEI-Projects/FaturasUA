@@ -3,6 +3,7 @@ package pt.cm.faturasua.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pt.cm.faturasua.components.InvoiceCard
@@ -32,24 +34,26 @@ fun HistoryScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "History",
-            fontSize = 30.sp,
-            color = Color.Black,
-            textAlign = TextAlign.Left
-        )
-
-        userViewModel.receiptsList.value?.forEach {
-            InvoiceCard(
-                type = it.type,
-                number = it.id,
-                title = it.title,
-                amount = it.amount.toDouble(),
-                date = it.date,
-                nif = it.businessNIF.toInt(),
-                iva = it.iva.toDouble(),
-                status = it.status
+        if (userViewModel.receiptsList.value!!.isEmpty()) {
+            Text(
+                text = "No invoices have been added yet!\n\nStart by adding one by clicking on the ＋ icon on the floating button.",
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(20.dp)
             )
+        } else {
+            userViewModel.receiptsList.value?.forEach {
+                InvoiceCard(
+                    type = it.type,
+                    number = it.id,
+                    title = it.title,
+                    amount = it.amount.toDouble(),
+                    date = it.date,
+                    nif = it.businessNIF.toInt(),
+                    iva = it.iva.toDouble(),
+                    status = it.status
+                )
+            }
         }
 
 /*        InvoiceCard(type = "FS", number = "FS 0603065224354619/2349", title = "COMPRA MCDONALDS", amount = 102, date = "20220214", nif = 509441130, iva = 1.66, status = null)
