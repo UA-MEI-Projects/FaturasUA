@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -33,6 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,57 +69,68 @@ fun ProfileScreen(
 
     ){
         if(passwordScreen){
+            var oldPassword by remember{ mutableStateOf("") }
             var newPassword by remember{ mutableStateOf("") }
             var newPasswordConfirm by remember{ mutableStateOf("") }
 
             OutlinedTextField(
-                value = newPassword,
-                label = { Text("New Password") },
-                onValueChange = { newPassword = it }
+                value = oldPassword,
+                label = { Text("Current password") },
+                onValueChange = { oldPassword = it },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
-            Spacer(modifier = Modifier.size(100.dp))
+            Spacer(modifier = Modifier.size(50.dp))
+            OutlinedTextField(
+                value = newPassword,
+                label = { Text("New password") },
+                onValueChange = { newPassword = it },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
+            Spacer(modifier = Modifier.size(50.dp))
             OutlinedTextField(
                 value = newPasswordConfirm,
-                label = { Text("Confirm New Password") },
-                onValueChange = { newPasswordConfirm = it }
+                label = { Text("Confirm new password") },
+                onValueChange = { newPasswordConfirm = it },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
-            Spacer(modifier = Modifier.size(30.dp))
-            ClickableText(
-                text = AnnotatedString("Edit Profile"),
+            Spacer(modifier = Modifier.size(50.dp))
+            OutlinedButton(
+                content = { Text("Go back") },
                 onClick = {
                     passwordScreen = !passwordScreen
                 }
             )
-            Spacer(modifier = Modifier.size(100.dp))
+            Spacer(modifier = Modifier.size(30.dp))
             Button(
                 onClick = {
                     if(newPassword.equals(newPasswordConfirm))
                         firebaseUtil.updatePassword(newPassword)
                 },
-                content = { Text(text = "Salvar alterações") }
+                content = { Text(text = "Change password") }
             )
         }
         else{
             var name by remember{ mutableStateOf(userViewModel.profile.value!!.name) }
             var email by remember{ mutableStateOf(userViewModel.profile.value!!.email) }
-            var phoneNmber by remember{ mutableStateOf(userViewModel.profile.value!!.phoneNumber) }
+            var phoneNumber by remember{ mutableStateOf(userViewModel.profile.value!!.phoneNumber) }
 
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg")
+                    .data("https://creazilla-store.fra1.digitaloceanspaces.com/icons/7912642/avatar-icon-md.png")
                     .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_launcher_background),
-                contentDescription = "@username",
+                contentDescription = "User avatar",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape),
             )
-
-            Text("@jhonitodoe_1")
-            Spacer(modifier = Modifier.size(100.dp))
+            Spacer(modifier = Modifier.size(30.dp))
             TextField(
                 value = name,
                 label = { Text(text = "Name") },
@@ -124,7 +140,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.size(10.dp))
             TextField(
                 value = email,
-                label = { Text(text = "E-Mail") },
+                label = { Text(text = "E-mail") },
                 onValueChange = { email = it},
                 readOnly = false
             )
@@ -137,30 +153,30 @@ fun ProfileScreen(
             )
             Spacer(modifier = Modifier.size(10.dp))
             TextField(
-                value = phoneNmber,
-                label = { Text(text = "Num. Telemóvel") },
-                onValueChange = { phoneNmber = it },
+                value = phoneNumber,
+                label = { Text(text = "Phone number") },
+                onValueChange = { phoneNumber = it },
                 readOnly = true
             )
             Spacer(modifier = Modifier.size(30.dp))
-            ClickableText(
-                text = AnnotatedString("Change Password"),
+            FilledTonalButton(
+                content = { Text("Change password") },
                 onClick = {
                     passwordScreen = !passwordScreen
                 }
             )
-            Spacer(modifier = Modifier.size(50.dp))
+            Spacer(modifier = Modifier.size(20.dp))
             Button(
                 onClick = {
                     val profile = Profile(
                         name = name,
                         email = email,
                         photo = Uri.EMPTY,
-                        phoneNumber = phoneNmber
+                        phoneNumber = phoneNumber
                     )
                     firebaseUtil.updateUserProfile(profile)
                 },
-                content = { Text(text = "Salvar alterações") }
+                content = { Text(text = "Save changes") }
             )
         }
 
