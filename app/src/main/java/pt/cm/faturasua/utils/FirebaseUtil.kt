@@ -72,27 +72,23 @@ class FirebaseUtil(
     }
 
     fun signIn(email: String, password: String) {
-        // [START sign_in_with_email]
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(context) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d("Sign in", "signInWithEmail:success")
                     val user = firebaseAuth.currentUser!!
                     userViewModel.name.value = user.displayName
                     userViewModel.profile.setValue(
                         Profile(
-                            name = user.displayName!!,
-                            email = user.email!!,
-                            phoneNumber = user.phoneNumber!!
+                            name = user.displayName.toString(),
+                            email = user.email.orEmpty(),
+                            phoneNumber = user.phoneNumber.orEmpty()
                         ))
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w("Sign in", "signInWithEmail:failure", task.exception)
 
                 }
             }
-        // [END sign_in_with_email]
     }
 
     fun signOut(){
@@ -162,6 +158,32 @@ class FirebaseUtil(
         userViewModel.receiptsList.setValue(receiptsList)
     }
 
+    fun getAllReceiptsFromDB(){
+        var receiptsList:ArrayList<Invoice> = ArrayList()
+        firebaseDatabase.getReference("users").get().addOnCompleteListener {
+            if(it.isSuccessful){
+                val users = it.result.children
+                users.forEach{user ->
+                    val invoices = user.children
+                    invoices.forEach { receipt ->
+                        val fields = receipt.children
+                        fields.forEach{field ->
+                            val invoice = field.getValue(Invoice::class.java)
+                            if (invoice != null) {
+                                receiptsList.add(invoice)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        userViewModel.receiptsList.setValue(receiptsList)
+    }
+
+    fun changeReceiptStatus(receiptId:String, receipt: Invoice){
+        dbReceiptsRef().child(receiptId).setValue(receipt)
+    }
+
     fun addReceiptToDB(receipt: Invoice){
         dbReceiptsRef().child(receipt.id).setValue(receipt)
     }
@@ -170,25 +192,23 @@ class FirebaseUtil(
         dbReceiptsRef()
             .addChildEventListener(object : ChildEventListener{
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    if(userViewModel.notifsOn.value!!){
-                        receiptNotificationService.sendReceiptAddedNotification()
-                    }
+                    snapshot.children
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    if(userViewModel.notifsOn.value!!){
+                    if(userViewModel.notifsOn.value){
                         receiptNotificationService.sendReceiptErrorNotification()
                     }
                 }

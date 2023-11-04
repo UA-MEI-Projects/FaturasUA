@@ -123,6 +123,7 @@ fun ScanScreen(
                                 sheetState.expand()
                                 showBottomSheet = true
                                 firebaseUtil.addReceiptToDB(invoice)
+                                receiptNotificationService.sendReceiptAddedNotification()
                             }
                         }
                         else{

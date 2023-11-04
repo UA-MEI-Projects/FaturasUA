@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.classes.ScanFABState
 import pt.cm.faturasua.components.BottomBar
 import pt.cm.faturasua.components.ScanFAB
@@ -81,11 +82,17 @@ fun MainScreen(
         }
     }
 
+    val topbarScreens = listOf(
+        DropdownMenuClass.Profile,
+        DropdownMenuClass.Settings
+    )
+
     Scaffold(
         topBar = { if(showTopBar) TopBar(
             navController = navController,
             onSignOutCallback = onSignOut,
-            firebaseUtil = firebaseUtil
+            firebaseUtil = firebaseUtil,
+            screens = topbarScreens
         ) },
         bottomBar = { if(showBottomBar) BottomBar(navController = navController) },
         floatingActionButton = { if(showFAB) ScanFAB(

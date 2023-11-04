@@ -52,12 +52,13 @@ fun HistoryScreen(
             )
         }
 
-        InvoiceCard(type = "FS", number = "FS 0603065224354619/2349", title = "COMPRA MCDONALDS", amount = 102, date = "20220214", nif = 509441130, iva = 1.66, status = null)
+/*        InvoiceCard(type = "FS", number = "FS 0603065224354619/2349", title = "COMPRA MCDONALDS", amount = 102, date = "20220214", nif = 509441130, iva = 1.66, status = null)
         InvoiceCard(type = "FT", number = "FT 11435234619/015229", title = "PAGAMENTO DE SERVICOS", amount = 1235.99, date = "20220221", nif = 509441130, iva = 1.66, status = true)
         InvoiceCard(type = "ND", number = "ND 23406234321010619/222", title = "LEVANTAMENTO MULTIBANCO", amount = 51.5, date = "20220222", nif = 509441130, iva = 1.66, status = true)
         InvoiceCard(type = "NC", number = "NC 123349/015229", title = "COMPRA QUIOSQUE", amount = 99.99, date = "20220223", nif = 509441130, iva = 1.66, status = true)
         InvoiceCard(type = "RC", number = "RC 732340010619/123", title = "COMPRA RAMONA", amount = 4.2, date = "20220224", nif = 509441130, iva = 1.66, status = true)
         InvoiceCard(type = "OR", number = "OR 123652201010619/019", title = "COMPRA GLICINIAS PLAZA", amount = 4.2, date = "20230227", nif = 509441130, iva = 1.66, status = false)
         InvoiceCard(type = "FS", number = "FS 2142/210", title = "COMPRA TEXTO EXTREMAMENTE LARGO OVERFLOW", amount = 111.69, date = "20230720", nif = 509441130, iva = 1.66, status = true)
+   */
     }
 }

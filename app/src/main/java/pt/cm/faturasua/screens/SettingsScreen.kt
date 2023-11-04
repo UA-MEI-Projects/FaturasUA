@@ -56,7 +56,7 @@ fun SettingsScreen(
             value = darkModeOn,
             onCheckedChange = {
                 darkModeOn = !darkModeOn
-                userViewModel.darkThemePreference.setValue(darkModeOn)
+                userViewModel.updateTheme(darkModeOn)
                 preferencesManager.saveData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, darkModeOn)
             }
         )
@@ -66,7 +66,7 @@ fun SettingsScreen(
             value = notifOn,
             onCheckedChange = {
                 notifOn = !notifOn
-                userViewModel.notifsOn.setValue(notifOn)
+                userViewModel.updateNotifs(notifOn)
                 preferencesManager.saveData(PreferencesManager.PREFERENCE_CODE_NOTIFICATIONS, notifOn)
 
             }

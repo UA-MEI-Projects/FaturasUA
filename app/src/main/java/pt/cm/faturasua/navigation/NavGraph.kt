@@ -42,7 +42,7 @@ fun NavGraph(
             DashboardScreen(userViewModel = userViewModel)
         }
         composable(BottomBarClass.Statistics.route){
-            StatisticsScreen()
+            StatisticsScreen(userViewModel = userViewModel)
         }
         composable(DropdownMenuClass.Profile.route){
             ProfileScreen(firebaseUtil = firebaseUtil, userViewModel = userViewModel)

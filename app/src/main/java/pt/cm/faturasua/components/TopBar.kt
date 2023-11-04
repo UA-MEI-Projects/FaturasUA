@@ -33,18 +33,14 @@ fun TopBar(
     navController: NavController,
     firebaseUtil: FirebaseUtil,
     modifier: Modifier = Modifier,
-    onSignOutCallback: () -> Unit
+    onSignOutCallback: () -> Unit,
+    screens: List<DropdownMenuClass>
 ) {
     val scope = rememberCoroutineScope()
 
     var menuExpanded by remember{
         mutableStateOf(false)
     }
-
-    val screens = listOf(
-        DropdownMenuClass.Profile,
-        DropdownMenuClass.Settings
-    )
 
 
     TopAppBar(title = {

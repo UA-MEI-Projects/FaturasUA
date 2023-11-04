@@ -16,11 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import com.example.compose.FaturasUATheme
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import pt.cm.faturasua.screens.AdminScreen
 import pt.cm.faturasua.screens.AuthScreen
 import pt.cm.faturasua.screens.MainScreen
 import pt.cm.faturasua.utils.PreferencesManager
@@ -49,14 +52,13 @@ class MainActivity : ComponentActivity() {
         val notificationManager=getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
 
-        userViewModel.darkThemePreference.setValue(PreferencesManager(context = this)
+        userViewModel.updateTheme(PreferencesManager(context = this)
                           .getData(PreferencesManager.PREFERENCE_CODE_DARK_MODE, false))
-        var darkTheme = userViewModel.darkThemePreference.value!!
-        userViewModel.darkThemePreference.observe(this, Observer {
-            darkTheme = it
-        })
+
 
         setContent {
+            val darkTheme = userViewModel.darkThemePreference.collectAsState().value
+            val adminMode = userViewModel.adminMode.collectAsState().value
             FaturasUATheme(
                 darkTheme = darkTheme
             ) {
@@ -67,27 +69,42 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val scope = rememberCoroutineScope()
                     val isUserSignedIn = firebaseUtil.isUserSignedIn(scope = scope).collectAsState().value
-                    if(isUserSignedIn){
-                        try {
-                            var user = firebaseAuth.currentUser!!
-                            userViewModel.name.setValue(user.displayName)
-                        }catch (e :Exception){
-                            e.printStackTrace()
-                        }
+                    if(adminMode){
+                        firebaseUtil.getAllReceiptsFromDB()
 
-                        firebaseUtil.receiptsListener()
-                        firebaseUtil.getReceiptsFromDB()
-
-                        MainScreen(
+                        AdminScreen(
                             firebaseUtil = firebaseUtil,
-                            onSignOut = {
-                                scope.launch { firebaseUtil.signOut() }
-                            },
-                            userViewModel = userViewModel
+                            onSignOutCallback = { userViewModel.changeToAdminMode(!adminMode)}
                         )
                     }
                     else{
-                        AuthScreen(firebaseUtil = firebaseUtil)
+                        if(isUserSignedIn){
+                            try {
+                                var user = firebaseAuth.currentUser!!
+                                userViewModel.name.setValue(user.displayName)
+                            }catch (e :Exception){
+                                e.printStackTrace()
+                            }
+
+                            firebaseUtil.receiptsListener()
+                            firebaseUtil.getReceiptsFromDB()
+
+                            MainScreen(
+                                firebaseUtil = firebaseUtil,
+                                onSignOut = {
+                                    scope.launch { firebaseUtil.signOut() }
+                                },
+                                userViewModel = userViewModel
+                            )
+                        }
+                        else{
+                            AuthScreen(
+                                firebaseUtil = firebaseUtil,
+                                onChangeAdminMode = {
+                                    userViewModel.changeToAdminMode(true)
+                                }
+                            )
+                        }
                     }
                 }
             }
