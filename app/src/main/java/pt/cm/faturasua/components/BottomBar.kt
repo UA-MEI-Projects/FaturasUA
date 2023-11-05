@@ -61,12 +61,12 @@ fun RowScope.AddItem(
         },
         colors = NavigationBarItemDefaults
             .colors(
-                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
                 disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 disabledIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                selectedTextColor =  MaterialTheme.colorScheme.surfaceVariant,
-                selectedIconColor = MaterialTheme.colorScheme.surfaceVariant,
+                selectedTextColor =  MaterialTheme.colorScheme.surface,
+                selectedIconColor = MaterialTheme.colorScheme.surface,
                 indicatorColor =  MaterialTheme.colorScheme.primaryContainer,
             ),
     )

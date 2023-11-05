@@ -22,10 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.utils.FirebaseUtil
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,15 +46,25 @@ fun TopBar(
 
 
     TopAppBar(title = {
-        Text(text = "FaturasUA", color = Color.White)
+        navController.currentBackStackEntry?.destination?.route?.let {
+            var title = it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+            if (it == "dashboard")
+                 title = "FaturasUA"
+            Text(
+                text = title,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         navigationIcon = {
-            if (navController.previousBackStackEntry != null){
-                IconButton(onClick = { navController.navigateUp() }) {
+            if (navController.currentBackStackEntry?.destination?.route != "dashboard"){
+                IconButton(onClick = { navController.navigate("dashboard") }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"
@@ -66,7 +78,6 @@ fun TopBar(
             IconButton(onClick = { menuExpanded = !menuExpanded}) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     contentDescription = "Menu Options"
                 )
             }

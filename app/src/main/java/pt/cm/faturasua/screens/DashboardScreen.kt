@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,11 +42,6 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Dashboard",
-            fontSize = 30.sp,
-            color = Color.Black
-        )
         DashboardGreeting(
             username = userViewModel.name.value.toString()
         )
@@ -95,7 +91,10 @@ fun DashboardGreeting(
         "Go to sleep,"
     }
     val user : String = username
-    Text("$greeting $user!")
+    Text("$greeting $user!", fontSize = 23.sp, fontWeight = FontWeight.Medium)
+    Spacer(modifier = Modifier.size(15.dp))
+    Text("Here is a summary of your invoices:")
+    Spacer(modifier = Modifier.size(15.dp))
 }
 
 // TODO: Get all invoices from that sector on the database and sum the amount of all of them
