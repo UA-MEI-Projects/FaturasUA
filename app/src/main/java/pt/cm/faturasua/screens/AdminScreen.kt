@@ -1,10 +1,14 @@
 package pt.cm.faturasua.screens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -32,22 +36,25 @@ fun AdminScreen(
             )
         }
     ) {
-        it
-
-        LazyColumn(
-            contentPadding = it
+        Column(
+            modifier = Modifier.padding(it)
         ) {
-            items(userViewModel.receiptsList.value!!){ it ->
-                InvoiceCard(
-                    type = it.type,
-                    number = it.id,
-                    title = it.title,
-                    amount = it.amount.toDouble(),
-                    date = it.date,
-                    nif = it.businessNIF.toInt(),
-                    iva = it.iva.toDouble(),
-                    status = it.status
-                )
+            Text("Title")
+            LazyColumn(
+                userScrollEnabled = true
+            ) {
+                items(userViewModel.receiptsList.value!!){ it ->
+                    InvoiceCard(
+                        type = it.type,
+                        number = it.id,
+                        title = it.title,
+                        amount = it.amount.toDouble(),
+                        date = it.date,
+                        nif = it.businessNIF.toInt(),
+                        iva = it.iva.toDouble(),
+                        status = it.status
+                    )
+                }
             }
         }
     }
