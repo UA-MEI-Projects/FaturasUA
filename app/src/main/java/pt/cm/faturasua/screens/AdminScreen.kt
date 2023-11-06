@@ -45,6 +45,7 @@ fun AdminScreen(
             ) {
                 items(userViewModel.receiptsList.value!!){ it ->
                     InvoiceCard(
+                        firebaseUtil = firebaseUtil,
                         type = it.type,
                         number = it.id,
                         title = it.title,

@@ -44,6 +44,7 @@ fun HistoryScreen(
         } else {
             userViewModel.receiptsList.value?.forEach {
                 InvoiceCard(
+                    firebaseUtil = firebaseUtil,
                     type = it.type,
                     number = it.id,
                     title = it.title,

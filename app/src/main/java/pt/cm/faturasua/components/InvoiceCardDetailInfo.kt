@@ -13,12 +13,6 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: Number, date: String, nif: Number, iva: Number, status : Boolean?) {
-    Text(
-        text = "Status: ${if (status == true) "Approved ✅" else if (status == false) "Rejected ❌" else "Pending 🕑"}",
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.tertiary,
-        modifier = Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 2.dp)
-    )
     var formatType : String = type
     when (type) {
         "OR" -> formatType = "Orçamento"
