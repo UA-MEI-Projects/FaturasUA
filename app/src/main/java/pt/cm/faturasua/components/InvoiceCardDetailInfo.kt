@@ -13,17 +13,39 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: Number, date: String, nif: Number, iva: Number, status : Boolean?) {
-    var formatType : String = type
-    when (type) {
-        "OR" -> formatType = "Orçamento"
-        "FP" -> formatType = "Fatura Pró-forma"
-        "FT" -> formatType = "Fatura"
-        "FS" -> formatType = "Fatura Simplificada"
-        "FR" -> formatType = "Fatura Recibo"
-        "ND" -> formatType = "Nota de Débito"
-        "NC" -> formatType = "Nota de Crédito"
-        "FCA" -> formatType = "Fatura de Auto-faturação"
-        "RC" -> formatType = "Recibo"
+    var category : String = "DG TEMP"
+    // TODO: Remove var and get it from above arguments from DB (previous selected by user from a dropdown when scanning, same with the title/description)
+    val categoryType : String = when (category) {
+        "DG" -> "Despesas Gerais"
+        "A" -> "Alimentação"
+        "E" -> "Educação"
+        "S" -> "Saúde"
+        "I" -> "Imóveis"
+        else -> category
+    }
+    Text(
+        text = "Category: $categoryType",
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.tertiary,
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+    )
+    val formatType : String = when (type) {
+        "OR" -> "Orçamento"
+        "FP" -> "Fatura Pró-Forma"
+        "FT" -> "Fatura"
+        "FS" -> "Fatura Simplificada"
+        "FR" -> "Fatura-Recibo"
+        "ND" -> "Nota de Débito"
+        "NC" -> "Nota de Crédito"
+        "NE" -> "Nota de Encomenda"
+        "FCA" -> "Fatura de Auto-Faturação"
+        "RG" -> "Recibo"
+        "RC" -> "Recibo IVA de Caixa"
+        "CM" -> "Consultas de Mesa"
+        "GR" -> "Guia de Remessa"
+        "GT" -> "Guia de Transporte"
+        "GD" -> "Guia ou Nota de Devolução"
+        else -> type
     }
     Text(
         text = "Invoice type: $formatType",
@@ -33,16 +55,29 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
     )
     Text(
         text = "Invoice number: $number",
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.tertiary,
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+    )
+    Text(
+        text = "Nome da entidade: [TODO: obter da API]",
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "NIF: ${nif.toString().chunked(3).joinToString(separator = " ")}",
+        text = "NIF da entidade: ${nif.toString().chunked(3).joinToString(separator = " ")}",
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.tertiary,
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+    )
+    Text(
+        text = "Morada fiscal da entidade:",
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
+    Text(text = "[TODO: obter da API e mostrar mapa aqui]", modifier = Modifier.padding(vertical = 15.dp))
     var value : Number = (amount.toDouble() -  iva.toDouble())
     Text(
         text = "Valor líquido (sem IVA): ${formatPrice(value)}€",
