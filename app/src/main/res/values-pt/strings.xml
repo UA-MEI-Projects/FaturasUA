@@ -10,4 +10,10 @@
     <string name="invoice_status_pending">Pendente</string>
     <string name="invoice_button_authorise">Autorizar</string>
     <string name="invoice_button_reject">Rejeitar</string>
+    <string name="auth_admin_login_button">Iniciar sessão como administrador da empresa</string>
+    <string name="auth_user_login_button">Iniciar sessão como funcionário da empresa</string>
+    <string name="auth_error_dialog_title">Erro</string>
+    <string name="auth_error_dialog_empty_fields">Alguns campos obrigatórios estão em branco. Por favor, preencha todos os campos e tente novamente.</string>
+    <string name="auth_error_dialog_invalid_fields">Alguns dos dados introduzidos não são válidos. Por favor, preencha corretamente os campos e tente novamente.</string>
+    <string name="auth_error_dialog_wrong_credentials">As credenciais que introduziu estão incorretas. Por favor, verifique as credenciais que introduziu e tente novamente.</string>
 </resources>

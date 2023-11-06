@@ -12,4 +12,10 @@
     <string name="invoice_status_pending">Pending</string>
     <string name="invoice_button_authorise">Authorise</string>
     <string name="invoice_button_reject">Reject</string>
+    <string name="auth_admin_login_button">Log in as company administrator</string>
+    <string name="auth_user_login_button">Log in as company employee</string>
+    <string name="auth_error_dialog_title">Error</string>
+    <string name="auth_error_dialog_empty_fields">Some required fields are empty. Please fill in all the fields and try again.</string>
+    <string name="auth_error_dialog_invalid_fields">Some of the data entered is not valid. Please fill in the fields correctly and try again.</string>
+    <string name="auth_error_dialog_wrong_credentials">The credentials you entered are incorrect. Please check the credentials you entered and try again.</string>
 </resources>
