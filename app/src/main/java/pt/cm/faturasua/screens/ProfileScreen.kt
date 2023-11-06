@@ -116,6 +116,7 @@ fun ProfileScreen(
             var name by remember{ mutableStateOf(userViewModel.profile.value!!.name) }
             var email by remember{ mutableStateOf(userViewModel.profile.value!!.email) }
             var phoneNumber by remember{ mutableStateOf(userViewModel.profile.value!!.phoneNumber) }
+            var nif = userViewModel.nif.value!!
 
 
             AsyncImage(
@@ -146,9 +147,9 @@ fun ProfileScreen(
             )
             Spacer(modifier = Modifier.size(10.dp))
             TextField(
-                value = "999199212",
+                value = nif,
                 label = { Text(text = "NIF") },
-                onValueChange = { /*TODO*/ },
+                onValueChange = {},
                 readOnly = true
             )
             Spacer(modifier = Modifier.size(10.dp))

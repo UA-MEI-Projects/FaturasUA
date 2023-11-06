@@ -71,6 +71,19 @@ class FirebaseUtil(
         // [END create_user_with_email]
     }
 
+    fun setNIF(nif : String){
+        firebaseDatabase.getReference("nif").setValue(nif)
+    }
+
+    fun getNif(){
+        var nif = ""
+        firebaseDatabase.getReference().child("nif").get().addOnCompleteListener {
+            if(it.isSuccessful){
+                nif = it.result.getValue(String::class.java).toString()
+                userViewModel.nif.setValue(nif)
+            }
+        }
+    }
     fun signIn(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(context) { task ->
@@ -152,10 +165,9 @@ class FirebaseUtil(
                         }
                     }
                 }
-
+                userViewModel.receiptsList.setValue(receiptsList)
             }
         }
-        userViewModel.receiptsList.setValue(receiptsList)
     }
 
     fun getAllReceiptsFromDB(){
@@ -175,9 +187,10 @@ class FirebaseUtil(
                         }
                     }
                 }
+                userViewModel.receiptsList.setValue(receiptsList)
             }
         }
-        userViewModel.receiptsList.setValue(receiptsList)
+
     }
 
     fun changeReceiptStatus(receiptId:String, receipt: Invoice){

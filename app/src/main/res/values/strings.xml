@@ -5,4 +5,5 @@
     <string name="settings_device_language_option">Device\'s language (%1$s)</string>
     <string name="settings_dark_mode">Dark mode</string>
     <string name="settings_notifications">Notifications</string>
+    <string name="faturas_about_description">FaturasUA é um projeto que procura facilitar a empresas a possibildiade de gerir as despesas dos seus trabalhador de forma fácil e intuitiva.</string>
 </resources>

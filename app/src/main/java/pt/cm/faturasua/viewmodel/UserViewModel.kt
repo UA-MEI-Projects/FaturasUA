@@ -21,6 +21,10 @@ class UserViewModel: ViewModel() {
         )
     }
 
+    val nif:MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
+
     private val _darkThemePreference = MutableStateFlow<Boolean>(false)
     val darkThemePreference: StateFlow<Boolean> = _darkThemePreference.asStateFlow()
 

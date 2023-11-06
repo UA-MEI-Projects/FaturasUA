@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -86,8 +87,12 @@ class MainActivity : ComponentActivity() {
                                 e.printStackTrace()
                             }
 
-                            firebaseUtil.receiptsListener()
-                            firebaseUtil.getReceiptsFromDB()
+                            LaunchedEffect(key1 = true){
+
+                                firebaseUtil.getNif()
+                                firebaseUtil.receiptsListener()
+                                firebaseUtil.getReceiptsFromDB()
+                            }
 
                             MainScreen(
                                 firebaseUtil = firebaseUtil,

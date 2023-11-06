@@ -1,6 +1,7 @@
 package pt.cm.faturasua.screens
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,8 +113,21 @@ fun SettingsScreen(
 
             }
         )
-        Spacer(modifier = Modifier.size(20.dp))
-
+        Spacer(modifier = Modifier.size(50.dp))
+        Column(
+            modifier = Modifier.padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = "About", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(text = stringResource(R.string.faturas_about_description))
+            Spacer(modifier = Modifier.size(30.dp))
+            Image(painter = painterResource(id = R.drawable.ua_logo),
+                contentDescription = "Logo UA",
+                modifier = Modifier.size(150.dp)
+            )
+        }
     }
 }
 
