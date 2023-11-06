@@ -81,6 +81,8 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:4.0.0")
     implementation("com.google.maps.android:maps-compose-utils:4.0.0")
     implementation("com.google.maps.android:maps-compose-widgets:4.0.0")
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

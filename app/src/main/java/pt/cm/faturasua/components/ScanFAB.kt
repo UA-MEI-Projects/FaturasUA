@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,13 +51,16 @@ import com.google.zxing.common.HybridBinarizer
 import kotlinx.coroutines.launch
 import pt.cm.faturasua.classes.ScanFABItemClass
 import pt.cm.faturasua.classes.ScanFABState
+import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.utils.QrCodeUtil
+import pt.cm.faturasua.utils.ReceiptNotificationService
 
 
 @Composable
 fun ScanFAB(
     modifier: Modifier = Modifier,
     context: Context,
+    firebaseUtil : FirebaseUtil,
     navController: NavController,
     scanFABState: ScanFABState,
     onScanFabStateChange: (ScanFABState) -> Unit
@@ -68,23 +72,24 @@ fun ScanFAB(
         ScanFABItemClass.AddImage
     )
 
+    val receiptNotificationService = remember{
+        ReceiptNotificationService(context = context)
+    }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
-                var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-                val intArray = IntArray(bitmap.getWidth() * bitmap.getHeight())
-                bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
-                val source: LuminanceSource =
-                    RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray)
 
-                val binaryBmp = BinaryBitmap(HybridBinarizer(source))
-                val qrCodeUtil = QrCodeUtil({result ->
-                    Log.d("QR Code Analysis", result)
-                })
-                qrCodeUtil.analyze(binaryBmp)
+                val qrCodeUtil = QrCodeUtil { result ->
+                    scope.launch {
+                        firebaseUtil.addReceiptToDB(result)
+                    }
+                    receiptNotificationService.sendReceiptAddedNotification()
+                }
+                qrCodeUtil.analyze(uri, context.applicationContext)
 
                 Log.d("PhotoPicker", "Selected URI: $uri")
             } else {

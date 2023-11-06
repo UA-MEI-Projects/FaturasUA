@@ -3,6 +3,7 @@ package pt.cm.faturasua.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -116,20 +117,14 @@ fun ScanScreen(
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
-                        val invoice  = ParsingUtil().parseQR(result)
-                        if(invoice != null){
-                            qrCode = invoice
+                            qrCode = result
                             scope.launch {
                                 sheetState.expand()
                                 showBottomSheet = true
-                                firebaseUtil.addReceiptToDB(invoice)
+                                firebaseUtil.addReceiptToDB(result)
                                 receiptNotificationService.sendReceiptAddedNotification()
                             }
                         }
-                        else{
-                            receiptNotificationService.sendReceiptErrorFormatNotification()
-                        }
-                    }
                 )
                 try {
                     cameraProviderFuture.get().bindToLifecycle(
