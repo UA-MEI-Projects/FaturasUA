@@ -5,5 +5,11 @@
     <string name="settings_device_language_option">Device\'s language (%1$s)</string>
     <string name="settings_dark_mode">Dark mode</string>
     <string name="settings_notifications">Notifications</string>
-    <string name="faturas_about_description">FaturasUA é um projeto que procura facilitar a empresas a possibildiade de gerir as despesas dos seus trabalhador de forma fácil e intuitiva.</string>
+    <string name="settings_about_title">About this project</string>
+    <string name="settings_about_description">FaturasUA é um projeto que procura facilitar a empresas a possibildiade de gerir as despesas dos seus trabalhador de forma fácil e intuitiva.</string>
+    <string name="invoice_status_authorised">Authorised</string>
+    <string name="invoice_status_rejected">Rejected</string>
+    <string name="invoice_status_pending">Pending</string>
+    <string name="invoice_button_authorise">Authorise</string>
+    <string name="invoice_button_reject">Reject</string>
 </resources>

@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -119,9 +120,9 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "About", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.settings_about_title), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.size(10.dp))
-            Text(text = stringResource(R.string.faturas_about_description))
+            Text(text = stringResource(R.string.settings_about_description), textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.size(30.dp))
             Image(painter = painterResource(id = R.drawable.ua_logo),
                 contentDescription = "Logo UA",

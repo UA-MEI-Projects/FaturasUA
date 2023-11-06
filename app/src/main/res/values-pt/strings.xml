@@ -4,4 +4,10 @@
     <string name="settings_device_language_option">Idioma do dispositivo (%1$s)</string>
     <string name="settings_dark_mode">Tema escuro</string>
     <string name="settings_notifications">Notificações</string>
+    <string name="settings_about_title">Acerca deste projeto</string>
+    <string name="invoice_status_authorised">Aprovada</string>
+    <string name="invoice_status_rejected">Rejeitada</string>
+    <string name="invoice_status_pending">Pendente</string>
+    <string name="invoice_button_authorise">Autorizar</string>
+    <string name="invoice_button_reject">Rejeitar</string>
 </resources>
