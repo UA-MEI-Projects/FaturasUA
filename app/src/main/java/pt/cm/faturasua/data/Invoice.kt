@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Invoice(
     val id : String = "",                                        // Invoice identifier/number
-    val title: String = "",                                      // Invoice designation
+    var title: String = "",                                      // Invoice designation
     val timestamp: String = LocalDateTime.now().toString(), // Scan datetime
     val type : String = "",                                      // Invoice type
     val businessNIF : String = "",                               // Business tax number

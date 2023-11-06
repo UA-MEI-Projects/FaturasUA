@@ -117,6 +117,7 @@ fun ScanScreen(
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
+                            result.title = userViewModel.profile.value.name
                             qrCode = result
                             scope.launch {
                                 sheetState.expand()
@@ -159,7 +160,6 @@ fun ScanScreen(
                             iva = qrCode.iva.toDouble(),
                             status = qrCode.status
                         )
-                        MapsScreen(pos = LatLng( 19.98556, 23.37066))
                     }
                     
                 }
