@@ -32,7 +32,9 @@ fun HistoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(state = scrollState),
+            .verticalScroll(state = scrollState)
+            .padding(vertical = 10.dp)
+            .padding(bottom = 60.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

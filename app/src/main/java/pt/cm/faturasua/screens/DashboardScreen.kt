@@ -40,7 +40,9 @@ fun DashboardScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(state = scrollState),
+            .verticalScroll(state = scrollState)
+            .padding(vertical = 20.dp)
+            .padding(bottom = 50.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
