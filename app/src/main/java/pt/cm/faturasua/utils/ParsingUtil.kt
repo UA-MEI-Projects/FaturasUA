@@ -27,8 +27,7 @@ class ParsingUtil {
         }*/
 
         // TODO: Ask user to given a little description for invoice, after scanning/uploading when confirming if invoice details are all OK
-        val title = "NAME GIVEN BY THE USERNAME TO BETTER IDENTIFY THE INVOICE"
-        var invoice = Invoice(id = number!!, title = title!!, type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
+        var invoice = Invoice(id = number!!, title = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
         System.out.println()
         System.out.println("number:\t\t$number")

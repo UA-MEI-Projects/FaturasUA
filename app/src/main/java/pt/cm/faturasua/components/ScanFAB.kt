@@ -84,6 +84,7 @@ fun ScanFAB(
             if (uri != null) {
 
                 val qrCodeUtil = QrCodeUtil { result ->
+                    result.title = firebaseUtil.firebaseAuth.currentUser?.displayName.toString()
                     scope.launch {
                         firebaseUtil.addReceiptToDB(result)
                     }
