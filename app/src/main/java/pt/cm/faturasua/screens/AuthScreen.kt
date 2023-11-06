@@ -186,7 +186,7 @@ fun AuthScreen(
                     onClick = { email, password, username, phoneNumber ->
                         if(email == "" || password == "" || username == "" || phoneNumber == "")
                             openAlertDialogErrorEmptyFields.value = true
-                        else if (!email.contains("@") || password.length < 8)
+                        else if (!email.contains("@") || password.length < 8 || !username.contains(" ") || phoneNumber.length != 9)
                             openAlertDialogErrorInvalidFields.value = true
                         else
                             firebaseUtil.createAccount(
