@@ -80,13 +80,6 @@ class MainActivity : ComponentActivity() {
                     }
                     else{
                         if(isUserSignedIn){
-                            try {
-                                var user = firebaseAuth.currentUser!!
-                                userViewModel.name.setValue(user.displayName)
-                            }catch (e :Exception){
-                                e.printStackTrace()
-                            }
-
                             LaunchedEffect(key1 = true){
 
                                 firebaseUtil.getNif()

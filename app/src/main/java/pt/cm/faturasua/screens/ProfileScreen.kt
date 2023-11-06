@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,10 +114,11 @@ fun ProfileScreen(
             )
         }
         else{
-            var name by remember{ mutableStateOf(userViewModel.profile.value!!.name) }
-            var email by remember{ mutableStateOf(userViewModel.profile.value!!.email) }
-            var phoneNumber by remember{ mutableStateOf(userViewModel.profile.value!!.phoneNumber) }
-            var nif = userViewModel.nif.value!!
+            val profile = userViewModel.profile.collectAsState().value
+            var name by remember{ mutableStateOf(profile.name) }
+            var email by remember{ mutableStateOf(profile.email) }
+            var phoneNumber by remember{ mutableStateOf(profile.phoneNumber) }
+            val nif = userViewModel.nif.value.toString()
 
 
             AsyncImage(

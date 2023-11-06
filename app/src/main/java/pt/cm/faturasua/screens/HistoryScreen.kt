@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ fun HistoryScreen(
     firebaseUtil: FirebaseUtil
 ){
     val scrollState = rememberScrollState()
+    val receiptsList = userViewModel.receiptsList.collectAsState().value
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,7 +36,7 @@ fun HistoryScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (userViewModel.receiptsList.value!!.isEmpty()) {
+        if (receiptsList.isEmpty()) {
             Text(
                 text = "No invoices have been added yet!\n\nStart by adding one by clicking on the ＋ icon on the floating button.",
                 textAlign = TextAlign.Center,
@@ -42,7 +44,7 @@ fun HistoryScreen(
                     .padding(20.dp)
             )
         } else {
-            userViewModel.receiptsList.value?.forEach {
+            receiptsList.forEach {
                 InvoiceCard(
                     firebaseUtil = firebaseUtil,
                     type = it.type,

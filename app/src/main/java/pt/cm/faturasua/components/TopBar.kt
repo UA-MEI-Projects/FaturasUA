@@ -63,7 +63,7 @@ fun TopBar(
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         navigationIcon = {
-            if (navController.currentBackStackEntry?.destination?.route != "dashboard"){
+            if (navController.previousBackStackEntry != null && navController.currentBackStackEntry?.destination?.route != "dashboard"){
                 IconButton(onClick = { navController.navigate("dashboard") }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,

@@ -51,16 +51,14 @@ class FirebaseUtil(
                         .setDisplayName(displayName)
                         .build()
                     user.updateProfile(profileChangeRequest).addOnCompleteListener {
-                        if(it.isSuccessful)
-                            userViewModel.name.value = user.displayName
-                    }
-                    userViewModel.profile.setValue(
-                        Profile(
-                            name = displayName,
-                            email = email,
-                            phoneNumber = phoneNumber
+                        userViewModel.updateProfile(
+                            Profile(
+                                name = displayName,
+                                email = email,
+                                phoneNumber = phoneNumber
+                            )
                         )
-                    )
+                    }
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -92,8 +90,7 @@ class FirebaseUtil(
                     Log.d("Sign in", "signInWithEmail:success")
                     success = true
                     val user = firebaseAuth.currentUser!!
-                    userViewModel.name.value = user.displayName
-                    userViewModel.profile.setValue(
+                    userViewModel.updateProfile(
                         Profile(
                             name = user.displayName.toString(),
                             email = user.email.orEmpty(),
@@ -167,7 +164,7 @@ class FirebaseUtil(
                         }
                     }
                 }
-                userViewModel.receiptsList.setValue(receiptsList)
+                userViewModel.updateReceiptList(receiptsList)
             }
         }
     }
@@ -189,7 +186,7 @@ class FirebaseUtil(
                         }
                     }
                 }
-                userViewModel.receiptsList.setValue(receiptsList)
+                userViewModel.updateReceiptList(receiptsList)
             }
         }
 
@@ -200,6 +197,7 @@ class FirebaseUtil(
     }
 
     fun addReceiptToDB(receipt: Invoice){
+        userViewModel.addToReceiptsList(receipt)
         dbReceiptsRef().child(receipt.id).setValue(receipt)
     }
 

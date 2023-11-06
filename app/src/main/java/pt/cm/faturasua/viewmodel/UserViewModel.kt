@@ -11,15 +11,8 @@ import pt.cm.faturasua.data.Invoice
 import pt.cm.faturasua.data.Profile
 
 class UserViewModel: ViewModel() {
-    val name: MutableLiveData<String> by lazy {
-        MutableLiveData<String>("")
-    }
-
-    val receiptsList: MutableLiveData<ArrayList<Invoice>> by lazy {
-        MutableLiveData<ArrayList<Invoice>>(
-            ArrayList()
-        )
-    }
+    private val _receiptsList = MutableStateFlow(ArrayList<Invoice>())
+    val receiptsList: StateFlow<ArrayList<Invoice>> = _receiptsList.asStateFlow()
 
     val nif:MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
@@ -34,11 +27,9 @@ class UserViewModel: ViewModel() {
     private val _adminMode = MutableStateFlow<Boolean>(false)
     val adminMode: StateFlow<Boolean> = _adminMode.asStateFlow()
 
-    val profile:MutableLiveData<Profile> by lazy {
-        MutableLiveData<Profile>(
-            Profile()
-        )
-    }
+    private val _profile = MutableStateFlow<Profile>(Profile())
+    val profile: StateFlow<Profile> = _profile.asStateFlow()
+
 
     fun updateTheme(state:Boolean){
         _darkThemePreference.update { state }
@@ -50,5 +41,20 @@ class UserViewModel: ViewModel() {
 
     fun changeToAdminMode(state : Boolean){
         _adminMode.update { state }
+    }
+
+    fun updateProfile(profile: Profile){
+        _profile.update { profile }
+    }
+
+    fun addToReceiptsList(invoice: Invoice){
+        _receiptsList.update {
+            it.add(invoice)
+            it
+        }
+    }
+
+    fun updateReceiptList(list : ArrayList<Invoice>){
+        _receiptsList.update { list }
     }
 }

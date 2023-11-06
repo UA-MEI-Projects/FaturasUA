@@ -98,6 +98,7 @@ fun MainScreen(
         floatingActionButton = { if(showFAB) ScanFAB(
             navController = navController,
             context = LocalContext.current,
+            firebaseUtil = firebaseUtil,
             scanFABState = floatingActionButtonState,
             onScanFabStateChange = {
                 floatingActionButtonState = it

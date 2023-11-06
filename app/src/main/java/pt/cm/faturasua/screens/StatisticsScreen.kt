@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -34,10 +35,10 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 fun StatisticsScreen(
     userViewModel: UserViewModel = viewModel()
 ){
-    val receiptsList = userViewModel.receiptsList.value
+    val receiptsList = userViewModel.receiptsList.collectAsState().value
     var scrollState = rememberScrollState()
-    var data = StatsUtil.scanChartData(receiptsList!!)
-    var totalExpenses = StatsUtil.scanTotalValue(receiptsList!!)
+    var data = StatsUtil.scanChartData(receiptsList)
+    var totalExpenses = StatsUtil.scanTotalValue(receiptsList)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -45,7 +46,7 @@ fun StatisticsScreen(
             .padding(30.dp)
     ) {
         Text("Número de Recibos Inseridos")
-        Text(userViewModel.receiptsList.value!!.size.toString())
+        Text(receiptsList.size.toString())
         Spacer(Modifier.size(40.dp))
         Text("Atividade do Utilizador")
         Spacer(Modifier.size(40.dp))

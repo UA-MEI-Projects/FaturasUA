@@ -26,8 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.StateFlow
 import pt.cm.faturasua.viewmodel.UserViewModel
 import pt.cm.faturasua.components.DashboardInvoiceCard
+import pt.cm.faturasua.data.Profile
 
 @Preview
 @Composable
@@ -43,7 +45,7 @@ fun DashboardScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         DashboardGreeting(
-            username = userViewModel.name.value.toString()
+            profile = userViewModel.profile
         )
 
         Card(
@@ -78,8 +80,9 @@ fun DashboardScreen(
 
 @Composable
 fun DashboardGreeting(
-    username: String
+    profile : StateFlow<Profile>
 ){
+    val profile = profile.collectAsState().value
     val hour : Int = Calendar.getInstance()[Calendar.HOUR_OF_DAY]
     val greeting : String = if (hour >= 20) {
         "Good night,"
@@ -90,7 +93,7 @@ fun DashboardGreeting(
     } else {
         "Go to sleep,"
     }
-    val user : String = username
+    val user : String = profile.name
     Text("$greeting $user!", fontSize = 23.sp, fontWeight = FontWeight.Medium)
     Spacer(modifier = Modifier.size(15.dp))
     Text("Here is a summary of your invoices:")
