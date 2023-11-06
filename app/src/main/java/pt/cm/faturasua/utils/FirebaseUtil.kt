@@ -193,8 +193,8 @@ class FirebaseUtil(
 
     }
 
-    fun changeReceiptStatus(receiptId:String, receipt: Invoice){
-        dbReceiptsRef().child(receiptId).setValue(receipt)
+    fun changeReceiptStatus(receiptId:String, value: Boolean){
+        dbReceiptsRef().child(receiptId).child("status").setValue(value)
     }
 
     fun addReceiptToDB(receipt: Invoice){
