@@ -3,12 +3,11 @@ package pt.cm.faturasua.screens
 import android.icu.text.DecimalFormat
 import android.icu.util.Calendar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.Icon
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.*
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +30,7 @@ import pt.cm.faturasua.viewmodel.UserViewModel
 import pt.cm.faturasua.components.DashboardInvoiceCard
 import pt.cm.faturasua.data.Profile
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun DashboardScreen(
@@ -51,19 +51,39 @@ fun DashboardScreen(
         )
 
         Card(
-            //onClick = { true },
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(horizontal = 10.dp, vertical = 3.dp)
         ) {
             // TODO: Get the tax number (NIF) dynamically from the DB
-            val taxNumber : Number = 248239230
+            val taxNumber : Number = 123456789//userViewModel.profile.collectAsState().value.phoneNumber.toInt()
             Text(
-                text = "Your tax number: ${taxNumber.toString().chunked(3).joinToString(separator = " ")}",
+                text = "Your company tax number is ${taxNumber.toString().chunked(3).joinToString(separator = " ")}",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(10.dp)
+            )
+        }
+
+        Card(
+            onClick = { true },
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiary,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 3.dp)
+                .padding(bottom = 5.dp)
+        ) {
+            // TODO: Get the total of invoices with the "pending" status
+            val pendingInvoicesCounter : Number = 2 //profile.collectAsState().value
+            Text(
+                text = "You have $pendingInvoicesCounter invoices pending approval",
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -72,11 +92,11 @@ fun DashboardScreen(
         }
 
         // Overview of invoices per sector
-        DashboardInvoiceCard(icon = Icons.Rounded.Home, color = MaterialTheme.colorScheme.tertiaryContainer, category = "gerais", title = "Despesas Gerais", amount = 6251.11)
-        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.secondaryContainer, category = "alimentacao", title = "Alimentação", amount = 800.34)
-        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.background, category = "educacao", title = "Educação", amount = 1486.09)
-        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.errorContainer, category = "saude", title = "Saúde", amount = 67.67)
-        DashboardInvoiceCard(icon = Icons.Rounded.ShoppingCart, color = MaterialTheme.colorScheme.surface, category = "imoveis", title = "Imóveis", amount = 342.24)
+        DashboardInvoiceCard(icon = Icons.Default.List, color = MaterialTheme.colorScheme.tertiaryContainer, category = "gerais", title = "Despesas Gerais", amount = 6251.11)
+        DashboardInvoiceCard(icon = Icons.Default.ShoppingCart, color = MaterialTheme.colorScheme.secondaryContainer, category = "alimentacao", title = "Alimentação", amount = 800.34)
+        DashboardInvoiceCard(icon = Icons.Default.Face, color = MaterialTheme.colorScheme.background, category = "educacao", title = "Educação", amount = 1486.09)
+        DashboardInvoiceCard(icon = Icons.Default.Favorite, color = MaterialTheme.colorScheme.errorContainer, category = "saude", title = "Saúde", amount = 67.67)
+        DashboardInvoiceCard(icon = Icons.Default.Home, color = MaterialTheme.colorScheme.surface, category = "imoveis", title = "Imóveis", amount = 342.24)
     }
 }
 
