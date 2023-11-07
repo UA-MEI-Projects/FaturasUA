@@ -18,18 +18,13 @@ class StatsUtil {
 
             val data = HashMap<String, Double>()
 
-            invoices.sortByDescending { it.timestamp }
-            if(invoices.size > 5){
-                var fromIndex = (invoices.size / 2)
-                var sublist = invoices.subList(fromIndex, invoices.size - 1)
-                sublist.forEach { invoice ->
-                    // val key = LocalDate.parse(invoice.date, dateTimeFormatter)
-                    val key = invoice.timestamp
-                    var value = invoice.amount.toDouble()
-                    /* value = if(value != null) value+1 else 1*/
+            invoices.forEach { invoice ->
+                // val key = LocalDate.parse(invoice.date, dateTimeFormatter)
+                val key = invoice.timestamp
+                var value = invoice.amount.toDouble()
+                /* value = if(value != null) value+1 else 1*/
 
-                    data.set(key, value)
-                }
+                data.set(key, value)
             }
 
             return data
@@ -41,8 +36,6 @@ class StatsUtil {
             invoices.forEach { invoice ->
                 total += invoice.amount.toDouble()
             }
-
-
 
             return total.toFloat()
         }
