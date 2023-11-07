@@ -155,6 +155,8 @@ fun ScanScreen(
                     Column {
                         InvoiceCardDetailInfo(
                             type = qrCode.type,
+                            category = qrCode.category,
+                            timestamp = qrCode.timestamp,
                             number = qrCode.id,
                             title = qrCode.title,
                             amount = qrCode.amount.toDouble(),

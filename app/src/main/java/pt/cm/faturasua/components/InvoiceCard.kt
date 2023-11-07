@@ -45,6 +45,8 @@ fun InvoiceCard(
     firebaseUtil : FirebaseUtil,
     adminMode : Boolean = false,
     type: String,
+    category : String,
+    timestamp: String,
     number: String,
     title: String,
     amount: Number,
@@ -189,6 +191,8 @@ fun InvoiceCard(
             if (expanded) {
                 InvoiceCardDetailInfo(
                     type = type,
+                    category = category,
+                    timestamp = timestamp,
                     number = number,
                     title = title,
                     amount = amount,

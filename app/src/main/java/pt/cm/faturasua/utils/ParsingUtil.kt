@@ -27,7 +27,7 @@ class ParsingUtil {
         }*/
 
         // TODO: Ask user to give a title and select a category for invoice, after scanning/uploading when confirming if invoice details are all OK
-        val invoice = Invoice(id = number!!, title = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
+        val invoice = Invoice(id = number!!, title = "", category = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
         return invoice
     }

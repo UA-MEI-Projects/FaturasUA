@@ -115,7 +115,7 @@ fun DashboardScreen(
         var totalAmountProperty = 0.00
 
         receiptsList.forEach {
-            when (it.type) { // TODO: Finished, just need to change to category (instead of type) when implemented on the invoice data class
+            when (it.category) {
                 "GE" -> totalAmountGeneralExpenses += it.amount.toDouble()
                 "M" -> totalAmountMeals += it.amount.toDouble()
                 "E" -> totalAmountEducation += it.amount.toDouble()

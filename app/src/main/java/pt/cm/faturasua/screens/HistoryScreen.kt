@@ -154,6 +154,8 @@ fun HistoryScreen(
                 InvoiceCard(
                     firebaseUtil = firebaseUtil,
                     type = it.type,
+                    category = it.category,
+                    timestamp = it.timestamp,
                     number = it.id,
                     title = it.title,
                     amount = it.amount.toDouble(),

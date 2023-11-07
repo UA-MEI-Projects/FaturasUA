@@ -14,9 +14,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: Number, date: String, nif: Number, iva: Number, status : Boolean?) {
-    var category : String = "GE TEMP"
-    // TODO: Remove var and get it from above arguments from DB (previous selected by user from a dropdown when scanning, same with the title/description)
+fun InvoiceCardDetailInfo(type: String, category: String, timestamp: String, number: String, title: String, amount: Number, date: String, nif: Number, iva: Number, status : Boolean?) {
     val categoryType : String = when (category) {
         "GE" -> stringResource(R.string.dashboard_category_general_expenses)
         "M" -> stringResource(R.string.dashboard_category_meals)
@@ -102,8 +100,7 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
-    // TODO: Hardcoded timestamp (for now)
-    val formatTimestamp = LocalDateTime.parse("2023-10-31T19:06:14.963943308", DateTimeFormatter.ISO_DATE_TIME).format(
+    val formatTimestamp = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
     Text(
         text = stringResource(R.string.invoice_scan_date, formatTimestamp),
