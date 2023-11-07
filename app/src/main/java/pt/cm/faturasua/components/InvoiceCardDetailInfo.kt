@@ -59,12 +59,12 @@ fun InvoiceCardDetailInfo(type: String, category: String, timestamp: String, num
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
-    Text(
+    /*Text(
         text = stringResource(R.string.invoice_entity_name, true), // TODO: obter da API
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
-    )
+    )*/
     Text(
         text = stringResource(
             R.string.invoice_entity_nif,
@@ -74,6 +74,7 @@ fun InvoiceCardDetailInfo(type: String, category: String, timestamp: String, num
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
+    /*
     Text(
         text = stringResource(R.string.invoice_tax_address),
         style = MaterialTheme.typography.bodyMedium,
@@ -81,7 +82,8 @@ fun InvoiceCardDetailInfo(type: String, category: String, timestamp: String, num
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(text = "[TODO: obter da API e mostrar mapa aqui]", modifier = Modifier.padding(vertical = 15.dp))
-    var value : Number = (amount.toDouble() -  iva.toDouble())
+    */
+    val value : Number = (amount.toDouble() -  iva.toDouble())
     Text(
         text = stringResource(R.string.invoice_net_price, formatPrice(value)),
         style = MaterialTheme.typography.bodyMedium,
