@@ -60,7 +60,7 @@ fun DashboardScreen(
         var totalAmountHealth = 0.00
         var totalAmountProperty = 0.00
 
-        var pendingInvoicesCounter by remember{ mutableIntStateOf(0) }
+        var pendingInvoicesCounter = 0
 
         receiptsList.forEach {
             when (it.category) {
