@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import pt.cm.faturasua.R
 import pt.cm.faturasua.viewmodel.UserViewModel
 import pt.cm.faturasua.components.DashboardInvoiceCard
+import pt.cm.faturasua.components.InvoiceCard
 import pt.cm.faturasua.data.Profile
 
 @Preview
@@ -104,41 +105,60 @@ fun DashboardScreen(
             )
         }
 
+        // Calculate invoice total amounts per sector
+        val receiptsList = userViewModel.receiptsList.collectAsState().value
+
+        var totalAmountGeneralExpenses = 0.00
+        var totalAmountMeals = 0.00
+        var totalAmountEducation = 0.00
+        var totalAmountHealth = 0.00
+        var totalAmountProperty = 0.00
+
+        receiptsList.forEach {
+            when (it.type) { // TODO: Finished, just need to change to category (instead of type) when implemented on the invoice data class
+                "GE" -> totalAmountGeneralExpenses += it.amount.toDouble()
+                "M" -> totalAmountMeals += it.amount.toDouble()
+                "E" -> totalAmountEducation += it.amount.toDouble()
+                "H" -> totalAmountHealth += it.amount.toDouble()
+                "P" -> totalAmountProperty += it.amount.toDouble()
+            }
+        }
+
         // Overview of invoices per sector
         DashboardInvoiceCard(
             icon = Icons.Default.List,
             color = MaterialTheme.colorScheme.tertiaryContainer,
             category = "gerais",
             title = stringResource(R.string.dashboard_category_general_expenses),
-            amount = 6251.11
+            amount = totalAmountGeneralExpenses
         )
         DashboardInvoiceCard(
             icon = Icons.Default.ShoppingCart,
             color = MaterialTheme.colorScheme.secondaryContainer,
             category = "alimentacao",
             title = stringResource(R.string.dashboard_category_meals),
-            amount = 800.34
+            amount = totalAmountMeals
         )
         DashboardInvoiceCard(
             icon = Icons.Default.Face,
             color = MaterialTheme.colorScheme.background,
             category = "educacao",
             title = stringResource(R.string.dashboard_category_education),
-            amount = 1486.09
+            amount = totalAmountEducation
         )
         DashboardInvoiceCard(
             icon = Icons.Default.Favorite,
             color = MaterialTheme.colorScheme.errorContainer,
             category = "saude",
             title = stringResource(R.string.dashboard_category_health),
-            amount = 67.67
+            amount = totalAmountHealth
         )
         DashboardInvoiceCard(
             icon = Icons.Default.Home,
             color = MaterialTheme.colorScheme.surface,
             category = "imoveis",
             title = stringResource(R.string.dashboard_category_property),
-            amount = 342.24
+            amount = totalAmountProperty
         )
     }
 }
@@ -163,11 +183,6 @@ fun DashboardGreeting(
     Spacer(modifier = Modifier.size(15.dp))
     Text(stringResource(R.string.dashboard_summary_label))
     Spacer(modifier = Modifier.size(15.dp))
-}
-
-// TODO: Get all invoices from that sector on the database and sum the amount of all of them
-fun totalInvoicesPerSector(sector: String) : Number {
-    return 0
 }
 
 fun formatPrice(price: Number): String {

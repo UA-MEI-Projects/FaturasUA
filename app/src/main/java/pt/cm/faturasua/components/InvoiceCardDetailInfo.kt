@@ -15,14 +15,14 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: Number, date: String, nif: Number, iva: Number, status : Boolean?) {
-    var category : String = "DG TEMP"
+    var category : String = "GE TEMP"
     // TODO: Remove var and get it from above arguments from DB (previous selected by user from a dropdown when scanning, same with the title/description)
     val categoryType : String = when (category) {
-        "DG" -> stringResource(R.string.dashboard_category_general_expenses)
-        "A" -> stringResource(R.string.dashboard_category_meals)
+        "GE" -> stringResource(R.string.dashboard_category_general_expenses)
+        "M" -> stringResource(R.string.dashboard_category_meals)
         "E" -> stringResource(R.string.dashboard_category_education)
-        "S" -> stringResource(R.string.dashboard_category_health)
-        "I" -> stringResource(R.string.dashboard_category_property)
+        "H" -> stringResource(R.string.dashboard_category_health)
+        "P" -> stringResource(R.string.dashboard_category_property)
         else -> category
     }
     Text(
