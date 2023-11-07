@@ -56,7 +56,7 @@ fun StatisticsScreen(
         val values = data.values.toList()
 
 
-        if(keys.size < 4){
+        if(receiptsList.size < 4){
             Text("Não existe registos suficientes para mostrar informação.")
         }
         else{
@@ -69,6 +69,7 @@ fun StatisticsScreen(
                 style = LineGraphStyle(
                     visibility = LinearGraphVisibility(
                         isHeaderVisible = true,
+                        isXAxisLabelVisible = false,
                         isYAxisLabelVisible = true,
                         isCrossHairVisible = true,
                         isGridVisible = true,

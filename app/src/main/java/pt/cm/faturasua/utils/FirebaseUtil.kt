@@ -82,13 +82,11 @@ class FirebaseUtil(
             }
         }
     }
-    fun signIn(email: String, password: String): Boolean {
-        var success : Boolean = false
+    fun signIn(email: String, password: String, onSignInResult: (Boolean) -> Unit){
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(context) { task ->
                 if (task.isSuccessful) {
                     Log.d("Sign in", "signInWithEmail:success")
-                    success = true
                     val user = firebaseAuth.currentUser!!
                     userViewModel.updateProfile(
                         Profile(
@@ -96,11 +94,13 @@ class FirebaseUtil(
                             email = user.email.orEmpty(),
                             phoneNumber = user.phoneNumber.orEmpty()
                         ))
+                    onSignInResult(true)
                 } else {
+                    onSignInResult(false)
                     Log.w("Sign in", "signInWithEmail:failure", task.exception)
                 }
             }
-        return success
+
     }
 
     fun signOut(){

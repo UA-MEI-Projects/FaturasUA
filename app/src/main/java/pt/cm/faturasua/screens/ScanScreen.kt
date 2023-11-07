@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +58,7 @@ fun ScanScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-
+    val notifsPermission = userViewModel.notifsOn.collectAsState().value
 
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
@@ -123,7 +124,9 @@ fun ScanScreen(
                                 sheetState.expand()
                                 showBottomSheet = true
                                 firebaseUtil.addReceiptToDB(result)
-                                receiptNotificationService.sendReceiptAddedNotification()
+                                if(notifsPermission){
+                                    receiptNotificationService.sendReceiptAddedNotification()
+                                }
                             }
                         }
                 )

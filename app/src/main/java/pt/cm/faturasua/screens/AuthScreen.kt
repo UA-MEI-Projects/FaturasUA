@@ -141,8 +141,11 @@ fun AuthScreen(
                             else if (!email.contains("@"))
                                 openAlertDialogErrorInvalidFields.value = true
                             else {
-                                if (!firebaseUtil.signIn(email = email, password = password))
-                                    openAlertDialogErrorWrongCredentials.value = true
+                                firebaseUtil.signIn(email = email, password = password){
+                                    if(!it){
+                                        openAlertDialogErrorWrongCredentials.value = true
+                                    }
+                                }
                             }
                         },
                         signUp = false

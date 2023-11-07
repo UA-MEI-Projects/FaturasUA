@@ -10,30 +10,41 @@ import java.util.LinkedList
 class StatsUtil {
     companion object{
 
-        fun scanChartData(invoices : ArrayList<Invoice>): HashMap<String, Int> {
+        fun scanChartData(invoices : ArrayList<Invoice>): HashMap<String, Double> {
 //            val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyymmdd")
 //            val data = HashMap<LocalDate, Int>()
 
-            val data = HashMap<String, Int>()
-            invoices.forEach { invoice ->
-               // val key = LocalDate.parse(invoice.date, dateTimeFormatter)
-                val key = invoice.date
-                var value = data.get(key)
-                value = if(value != null) value+1 else 1
-                data.set(key, value)
+           // val data = HashMap<String, Int>()
+
+            val data = HashMap<String, Double>()
+
+            invoices.sortByDescending { it.timestamp }
+            if(invoices.size > 5){
+                var fromIndex = (invoices.size / 2)
+                var sublist = invoices.subList(fromIndex, invoices.size - 1)
+                sublist.forEach { invoice ->
+                    // val key = LocalDate.parse(invoice.date, dateTimeFormatter)
+                    val key = invoice.timestamp
+                    var value = invoice.amount.toDouble()
+                    /* value = if(value != null) value+1 else 1*/
+
+                    data.set(key, value)
+                }
             }
 
             return data
         }
 
-        fun scanTotalValue(invoices: ArrayList<Invoice>): Double{
+        fun scanTotalValue(invoices: ArrayList<Invoice>): Float {
             var total: Double = 0.0
 
             invoices.forEach { invoice ->
                 total += invoice.amount.toDouble()
             }
 
-            return total
+
+
+            return total.toFloat()
         }
     }
 

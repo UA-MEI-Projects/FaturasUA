@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.LuminanceSource
@@ -54,6 +55,7 @@ import pt.cm.faturasua.classes.ScanFABState
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.utils.QrCodeUtil
 import pt.cm.faturasua.utils.ReceiptNotificationService
+import pt.cm.faturasua.viewmodel.UserViewModel
 
 
 @Composable
@@ -62,6 +64,7 @@ fun ScanFAB(
     context: Context,
     firebaseUtil : FirebaseUtil,
     navController: NavController,
+    userViewModel: UserViewModel = viewModel(),
     scanFABState: ScanFABState,
     onScanFabStateChange: (ScanFABState) -> Unit
 ){
@@ -84,11 +87,13 @@ fun ScanFAB(
             if (uri != null) {
 
                 val qrCodeUtil = QrCodeUtil { result ->
-                    result.title = firebaseUtil.firebaseAuth.currentUser?.displayName.toString()
+                    result.title = userViewModel.profile.value.name
                     scope.launch {
                         firebaseUtil.addReceiptToDB(result)
                     }
-                    receiptNotificationService.sendReceiptAddedNotification()
+                    if (userViewModel.notifsOn.value){
+                        receiptNotificationService.sendReceiptAddedNotification()
+                    }
                 }
                 qrCodeUtil.analyze(uri, context.applicationContext)
 
