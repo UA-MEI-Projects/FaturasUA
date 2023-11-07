@@ -115,9 +115,6 @@ fun ScanScreen(
             hasCameraPermission = granted
         }
     )
-    val receiptNotificationService = remember{
-        ReceiptNotificationService(context = context)
-    }
 
     LaunchedEffect(key1 = true){
         launcher.launch(Manifest.permission.CAMERA)

@@ -58,8 +58,9 @@ fun InvoiceCard(
 ) {
 
     var expanded by remember { mutableStateOf (false) }
+    var liveStatus by remember { mutableStateOf(status) }
 
-    val color = when (status) {
+    val color = when (liveStatus) {
         true -> MaterialTheme.colorScheme.surfaceTint
         false -> MaterialTheme.colorScheme.errorContainer
         else -> MaterialTheme.colorScheme.tertiaryContainer
@@ -113,14 +114,14 @@ fun InvoiceCard(
                 ) {
                     Row(){
                         Text(
-                            text = when (status) {
+                            text = when (liveStatus) {
                                 true -> stringResource(R.string.invoice_status_authorised).uppercase()
                                 false -> stringResource(R.string.invoice_status_rejected).uppercase()
                                 else -> stringResource(R.string.invoice_status_pending).uppercase()
                             },
                             modifier = Modifier.padding(horizontal = 5.dp),
                             style = MaterialTheme.typography.labelSmall,
-                            color = when (status) {
+                            color = when (liveStatus) {
                                 true -> MaterialTheme.colorScheme.primary
                                 false -> MaterialTheme.colorScheme.error
                                 else -> MaterialTheme.colorScheme.tertiary
@@ -128,14 +129,14 @@ fun InvoiceCard(
                             textAlign = TextAlign.Right,
                         )
                         Icon(
-                            imageVector = when (status) {
+                            imageVector = when (liveStatus) {
                                 true -> Icons.Rounded.Check
                                 false -> Icons.Rounded.Close
                                 else -> Icons.Rounded.Warning
                             },
                             modifier = Modifier.size(15.dp),
                             contentDescription = "",
-                            tint = when (status) {
+                            tint = when (liveStatus) {
                                 true -> MaterialTheme.colorScheme.primary
                                 false -> MaterialTheme.colorScheme.error
                                 else -> MaterialTheme.colorScheme.tertiary
@@ -152,7 +153,7 @@ fun InvoiceCard(
                 }
             }
 
-            if (adminMode && status == null) {
+            if (adminMode && liveStatus == null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -160,7 +161,10 @@ fun InvoiceCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { firebaseUtil.changeReceiptStatus(number,user, true) },
+                        onClick = {
+                                firebaseUtil.changeReceiptStatus(number,user, true)
+                                liveStatus = true
+                                  },
                         modifier = Modifier
                             .weight(1f)
                             .height(40.dp)
@@ -173,7 +177,10 @@ fun InvoiceCard(
                         Text(text = " " + stringResource(R.string.invoice_button_authorise))
                     }
                     Button(
-                        onClick = { firebaseUtil.changeReceiptStatus(number,user, false) },
+                        onClick = {
+                            firebaseUtil.changeReceiptStatus(number,user, false)
+                            liveStatus = false
+                                  },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
                         modifier = Modifier
                             .weight(1f)
@@ -200,7 +207,7 @@ fun InvoiceCard(
                     date = date,
                     nif = nif,
                     iva = iva,
-                    status = status
+                    status = liveStatus
                 )
             }
         }
