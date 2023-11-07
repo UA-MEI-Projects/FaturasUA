@@ -6,7 +6,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pt.cm.faturasua.R
 import pt.cm.faturasua.screens.formatPrice
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -16,15 +18,15 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
     var category : String = "DG TEMP"
     // TODO: Remove var and get it from above arguments from DB (previous selected by user from a dropdown when scanning, same with the title/description)
     val categoryType : String = when (category) {
-        "DG" -> "Despesas Gerais"
-        "A" -> "Alimentação"
-        "E" -> "Educação"
-        "S" -> "Saúde"
-        "I" -> "Imóveis"
+        "DG" -> stringResource(R.string.dashboard_category_general_expenses)
+        "A" -> stringResource(R.string.dashboard_category_meals)
+        "E" -> stringResource(R.string.dashboard_category_education)
+        "S" -> stringResource(R.string.dashboard_category_health)
+        "I" -> stringResource(R.string.dashboard_category_property)
         else -> category
     }
     Text(
-        text = "Category: $categoryType",
+        text = stringResource(R.string.invoice_category, categoryType),
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
@@ -48,31 +50,34 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
         else -> type
     }
     Text(
-        text = "Invoice type: $formatType",
+        text = stringResource(R.string.invoice_type, formatType),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "Invoice number: $number",
+        text = stringResource(R.string.invoice_number, number),
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "Nome da entidade: [TODO: obter da API]",
+        text = stringResource(R.string.invoice_entity_name, true), // TODO: obter da API
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "NIF da entidade: ${nif.toString().chunked(3).joinToString(separator = " ")}",
+        text = stringResource(
+            R.string.invoice_entity_nif,
+            nif.toString().chunked(3).joinToString(separator = " ")
+        ),
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "Morada fiscal da entidade:",
+        text = stringResource(R.string.invoice_tax_address),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
@@ -80,19 +85,19 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
     Text(text = "[TODO: obter da API e mostrar mapa aqui]", modifier = Modifier.padding(vertical = 15.dp))
     var value : Number = (amount.toDouble() -  iva.toDouble())
     Text(
-        text = "Valor líquido (sem IVA): ${formatPrice(value)}€",
+        text = stringResource(R.string.invoice_net_price, formatPrice(value)),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "Valor IVA: ${formatPrice(iva)}€",
+        text = stringResource(R.string.invoice_vat_price, formatPrice(iva)),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
     )
     Text(
-        text = "Valor total pago: ${formatPrice(amount)}€",
+        text = stringResource(R.string.invoice_total_amount, formatPrice(amount)),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
@@ -101,7 +106,7 @@ fun InvoiceCardDetailInfo(type: String, number: String, title: String, amount: N
     val formatTimestamp = LocalDateTime.parse("2023-10-31T19:06:14.963943308", DateTimeFormatter.ISO_DATE_TIME).format(
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
     Text(
-        text = "Digitalizada em: $formatTimestamp",
+        text = stringResource(R.string.invoice_scan_date, formatTimestamp),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)

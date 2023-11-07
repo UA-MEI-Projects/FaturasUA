@@ -22,9 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import pt.cm.faturasua.R
 import pt.cm.faturasua.classes.DropdownMenuClass
 import pt.cm.faturasua.utils.FirebaseUtil
 import java.util.Locale
@@ -98,7 +100,7 @@ fun TopBar(
                     )
                 }
                 DropdownMenuItem(
-                    text = { Text(text= "Log Out") },
+                    text = { Text(text= stringResource(R.string.navbar_menu_log_out)) },
                     onClick = {
                         onSignOutCallback()
                         menuExpanded = !menuExpanded

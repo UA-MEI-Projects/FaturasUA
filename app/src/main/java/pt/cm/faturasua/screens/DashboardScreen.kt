@@ -61,7 +61,10 @@ fun DashboardScreen(
             // TODO: Get the tax number (NIF) dynamically from the DB
             val taxNumber : Number = 123456789//userViewModel.profile.collectAsState().value.phoneNumber.toInt()
             Text(
-                text = "Your company tax number is ${taxNumber.toString().chunked(3).joinToString(separator = " ")}",
+                text = stringResource(
+                    R.string.dashboard_tax_number_display,
+                    taxNumber.toString().chunked(3).joinToString(separator = " ")
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .padding(10.dp)
@@ -80,7 +83,7 @@ fun DashboardScreen(
             // TODO: Get the total of invoices with the "pending" status
             val pendingInvoicesCounter : Number = 2 //profile.collectAsState().value
             Text(
-                text = "You have $pendingInvoicesCounter invoices pending approval",
+                text = stringResource(R.string.dashboard_pending_invoices, pendingInvoicesCounter),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -93,9 +96,11 @@ fun DashboardScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Total invoice amounts entered by you, per category",
+                text = stringResource(R.string.dashboard_total_amount_categories_label),
                 style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(horizontal = 10.dp).padding(top = 10.dp)
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 10.dp)
             )
         }
 
@@ -145,18 +150,18 @@ fun DashboardGreeting(
     val profile = profile.collectAsState().value
     val hour : Int = Calendar.getInstance()[Calendar.HOUR_OF_DAY]
     val greeting : String = if (hour >= 20) {
-        "Good night,"
+        stringResource(R.string.dashboard_greeting_night)
     } else if (hour >= 13) {
-        "Good afternoon,"
+        stringResource(R.string.dashboard_greeting_afternoon)
     } else if (hour >= 6) {
-        "Good morning,"
+        stringResource(R.string.dashboard_greeting_morning)
     } else {
-        "Go to sleep,"
+        stringResource(R.string.dashboard_greeting_bedtime)
     }
     val user : String = profile.name
-    Text("$greeting $user!", fontSize = 23.sp, fontWeight = FontWeight.Medium)
+    Text("$greeting, $user!", fontSize = 23.sp, fontWeight = FontWeight.Medium)
     Spacer(modifier = Modifier.size(15.dp))
-    Text("Here is a summary of your invoices:")
+    Text(stringResource(R.string.dashboard_summary_label))
     Spacer(modifier = Modifier.size(15.dp))
 }
 

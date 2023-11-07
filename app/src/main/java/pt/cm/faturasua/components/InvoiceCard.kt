@@ -94,11 +94,11 @@ fun InvoiceCard(
                         textAlign = TextAlign.Left,
                     )
                     Text(
-                        text = title,
+                        text = title.uppercase(),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .padding(horizontal = 5.dp, vertical = 2.dp)
-                            .width(230.dp),
+                            .width(220.dp),
                         textAlign = TextAlign.Left,
                         color = MaterialTheme.colorScheme.tertiary,
                         overflow = TextOverflow.Ellipsis,

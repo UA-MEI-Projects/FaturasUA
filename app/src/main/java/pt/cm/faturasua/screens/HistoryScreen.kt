@@ -30,12 +30,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import pt.cm.faturasua.R
 import pt.cm.faturasua.components.InvoiceCard
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.viewmodel.UserViewModel
@@ -65,7 +67,7 @@ fun HistoryScreen(
             singleLine = true,
             trailingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
             onValueChange = { newValue -> searchQuery = newValue },
-            label = { Text("Search by invoice number, title or NIF") },
+            label = { Text(stringResource(R.string.history_search_bar_label)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
@@ -117,7 +119,7 @@ fun HistoryScreen(
                         },
                 ){
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "", tint = MaterialTheme.colorScheme.error)
-                    Text(text = "Clear all\nfilters",
+                    Text(text = stringResource(R.string.history_clear_filters),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error

@@ -22,4 +22,25 @@
     <string name="dashboard_category_education">Educação</string>
     <string name="dashboard_category_health">Saúde</string>
     <string name="dashboard_category_property">Imóveis</string>
+    <string name="navbar_menu_log_out">Terminar sessão</string>
+    <string name="dashboard_greeting_night">Boa noite</string>
+    <string name="dashboard_greeting_afternoon">Boa tarde</string>
+    <string name="dashboard_greeting_morning">Bom dia</string>
+    <string name="dashboard_greeting_bedtime">Vai dormir</string>
+    <string name="dashboard_summary_label">Aqui está o resumo das suas faturas:</string>
+    <string name="dashboard_total_amount_categories_label">Montantes totais das faturas introduzidos por si, por categoria</string>
+    <string name="dashboard_pending_invoices">Tem %1$s facturas a aguardar aprovação</string>
+    <string name="dashboard_tax_number_display">O número de contribuinte (NIF) da sua empresa é %1$s</string>
+    <string name="history_clear_filters">Limpar\nfiltros</string>
+    <string name="history_search_bar_label">Filtrar por nº, título ou NIF da fatura…</string>
+    <string name="invoice_category">Categoria: %1$s</string>
+    <string name="invoice_type">Tipo de fatura: %1$s</string>
+    <string name="invoice_number">Número da fatura: %1$s</string>
+    <string name="invoice_entity_name">Nome da entidade: %1$s</string>
+    <string name="invoice_entity_nif">NIF da entidade: %1$s</string>
+    <string name="invoice_tax_address">Morada fiscal da entidade:</string>
+    <string name="invoice_net_price">Valor líquido (sem IVA): %1$s€</string>
+    <string name="invoice_vat_price">Valor IVA: %1$s€</string>
+    <string name="invoice_total_amount">Valor total pago: %1$s€</string>
+    <string name="invoice_scan_date">Digitalizada em: %1$s</string>
 </resources>
