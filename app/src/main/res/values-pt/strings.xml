@@ -43,4 +43,9 @@
     <string name="invoice_vat_price">Valor IVA: %1$s€</string>
     <string name="invoice_total_amount">Valor total pago: %1$s€</string>
     <string name="invoice_scan_date">Digitalizada em: %1$s</string>
+    <string name="stats_total_invoices">Número total de faturas inseridas por si:</string>
+    <string name="stats_user_activity">Atividade do Utilizador</string>
+    <string name="stats_not_enough_data">Ainda não existem dados suficientes para apresentar gráficos aqui.</string>
+    <string name="stats_graph_label">Faturas por data</string>
+    <string name="stats_graph_title">Despesas totais por data:</string>
 </resources>

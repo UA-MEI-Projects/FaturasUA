@@ -44,4 +44,9 @@
     <string name="invoice_vat_price">VAT value: %1$s€</string>
     <string name="invoice_total_amount">Total amount paid: %1$s€</string>
     <string name="invoice_scan_date">Scanned on: %1$s</string>
+    <string name="stats_total_invoices">Total number of invoices entered by you:</string>
+    <string name="stats_user_activity">User Activity</string>
+    <string name="stats_not_enough_data">There is not enough data to display charts here right now.</string>
+    <string name="stats_graph_label">Invoices by date</string>
+    <string name="stats_graph_title">Total expenses by date:</string>
 </resources>
