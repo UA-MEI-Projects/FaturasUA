@@ -51,6 +51,29 @@ fun DashboardScreen(
             profile = userViewModel.profile
         )
 
+        // Calculate invoice total amounts per sector
+        val receiptsList = userViewModel.receiptsList.collectAsState().value
+
+        var totalAmountGeneralExpenses = 0.00
+        var totalAmountMeals = 0.00
+        var totalAmountEducation = 0.00
+        var totalAmountHealth = 0.00
+        var totalAmountProperty = 0.00
+
+        var pendingInvoicesCounter = 0
+
+        receiptsList.forEach {
+            when (it.category) {
+                "GE" -> totalAmountGeneralExpenses += it.amount.toDouble()
+                "M" -> totalAmountMeals += it.amount.toDouble()
+                "E" -> totalAmountEducation += it.amount.toDouble()
+                "H" -> totalAmountHealth += it.amount.toDouble()
+                "P" -> totalAmountProperty += it.amount.toDouble()
+            }
+            if (it.status == null)
+                pendingInvoicesCounter++
+        }
+
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
@@ -72,29 +95,28 @@ fun DashboardScreen(
             )
         }
 
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 3.dp)
-                .padding(bottom = 5.dp)
-        ) {
-            // TODO: Get the total of invoices with the "pending" status
-            val pendingInvoicesCounter : Number = 2 //profile.collectAsState().value
-            Text(
-                text = stringResource(R.string.dashboard_pending_invoices, pendingInvoicesCounter),
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
+        if (pendingInvoicesCounter > 0){
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                ),
                 modifier = Modifier
-                    .padding(10.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 3.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.dashboard_pending_invoices, pendingInvoicesCounter),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+            }
         }
 
         Row (
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(top = 5.dp)
         ) {
             Text(
                 text = stringResource(R.string.dashboard_total_amount_categories_label),
@@ -103,25 +125,6 @@ fun DashboardScreen(
                     .padding(horizontal = 10.dp)
                     .padding(top = 10.dp)
             )
-        }
-
-        // Calculate invoice total amounts per sector
-        val receiptsList = userViewModel.receiptsList.collectAsState().value
-
-        var totalAmountGeneralExpenses = 0.00
-        var totalAmountMeals = 0.00
-        var totalAmountEducation = 0.00
-        var totalAmountHealth = 0.00
-        var totalAmountProperty = 0.00
-
-        receiptsList.forEach {
-            when (it.category) {
-                "GE" -> totalAmountGeneralExpenses += it.amount.toDouble()
-                "M" -> totalAmountMeals += it.amount.toDouble()
-                "E" -> totalAmountEducation += it.amount.toDouble()
-                "H" -> totalAmountHealth += it.amount.toDouble()
-                "P" -> totalAmountProperty += it.amount.toDouble()
-            }
         }
 
         // Overview of invoices per sector
