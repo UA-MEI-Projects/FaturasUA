@@ -18,4 +18,9 @@
     <string name="auth_error_dialog_empty_fields">Some required fields are empty. Please fill in all the fields and try again.</string>
     <string name="auth_error_dialog_invalid_fields">Some of the data entered is not valid. Please fill in the fields correctly and try again.</string>
     <string name="auth_error_dialog_wrong_credentials">The credentials you entered are incorrect. Please check the credentials you entered and try again.</string>
+    <string name="dashboard_category_general_expenses">General Expenses</string>
+    <string name="dashboard_category_meals">Meals</string>
+    <string name="dashboard_category_education">Education</string>
+    <string name="dashboard_category_health">Health</string>
+    <string name="dashboard_category_property">Property</string>
 </resources>

@@ -23,8 +23,6 @@ import pt.cm.faturasua.screens.formatPrice
 @Composable
 fun DashboardInvoiceCard(icon: ImageVector, color: Color, category: String, title: String, amount: Number) {
     Card(
-        //onClick = { true },
-        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = color,
         ),
@@ -37,7 +35,7 @@ fun DashboardInvoiceCard(icon: ImageVector, color: Color, category: String, titl
     ) {
         Column(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(6.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -47,7 +45,7 @@ fun DashboardInvoiceCard(icon: ImageVector, color: Color, category: String, titl
             ) {
                 Icon(
                     icon,
-                    contentDescription = "Icon",
+                    contentDescription = "",
                     modifier = Modifier.padding(5.dp),
                 )
                 Text(
