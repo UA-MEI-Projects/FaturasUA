@@ -82,12 +82,10 @@ fun DashboardScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp, vertical = 3.dp)
         ) {
-            // TODO: Get the tax number (NIF) dynamically from the DB
-            val taxNumber : Number = 123456789//userViewModel.profile.collectAsState().value.phoneNumber.toInt()
             Text(
                 text = stringResource(
                     R.string.dashboard_tax_number_display,
-                    taxNumber.toString().chunked(3).joinToString(separator = " ")
+                    userViewModel.nif.value.toString().chunked(3).joinToString(separator = " ")
                 ),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
