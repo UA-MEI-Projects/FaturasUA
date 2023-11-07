@@ -18,10 +18,22 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,12 +46,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
+import pt.cm.faturasua.R
 import pt.cm.faturasua.components.InvoiceCardDetailInfo
 import pt.cm.faturasua.data.Invoice
 import pt.cm.faturasua.utils.FirebaseUtil
@@ -63,9 +77,10 @@ fun ScanScreen(
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
     }
-    var showBottomSheet by remember{
+    var showBottomSheet by remember{ // TODO: To delete
         mutableStateOf(false)
     }
+
     var qrCode by remember{
         mutableStateOf(Invoice())
     }
@@ -77,6 +92,18 @@ fun ScanScreen(
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         )
+    }
+
+    val openAlertDialogScan = remember { mutableStateOf(true) }
+    when {
+        openAlertDialogScan.value -> {
+            AlertDialogScan(
+                onDismissRequest = { openAlertDialogScan.value = false },
+                onConfirmation = { firebaseUtil.addReceiptToDB(qrCode) },
+                dialogTitle = "Invoice scanned!",
+                dialogContent = { AlertDialogScanContent(qrCode) },
+            )
+        }
     }
 
     val launcher = rememberLauncherForActivityResult(
@@ -122,9 +149,9 @@ fun ScanScreen(
                             result.title = userViewModel.profile.value.name
                             qrCode = result
                             scope.launch {
-                                sheetState.expand()
-                                showBottomSheet = true
-                                firebaseUtil.addReceiptToDB(result)
+                                //sheetState.expand()
+                                //showBottomSheet = true
+                                openAlertDialogScan.value = true
                             }
                             imageAnalysis.clearAnalyzer()
                         }
@@ -151,20 +178,7 @@ fun ScanScreen(
                     sheetState = sheetState,
                     modifier = Modifier.padding(20.dp)
                 ){
-                    Column {
-                        InvoiceCardDetailInfo(
-                            type = qrCode.type,
-                            category = qrCode.category,
-                            timestamp = qrCode.timestamp,
-                            number = qrCode.id,
-                            title = qrCode.title,
-                            amount = qrCode.amount.toDouble(),
-                            date = qrCode.date,
-                            nif = qrCode.businessNIF.toInt(),
-                            iva = qrCode.iva.toDouble(),
-                            status = qrCode.status
-                        )
-                    }
+
                     
                 }
 
@@ -172,5 +186,63 @@ fun ScanScreen(
 
         }
     }
+}
+
+@Composable
+fun AlertDialogScanContent(
+    qrCode : Invoice
+){
+    var invoiceTitle by remember { mutableStateOf("") }
+    var invoiceCategory by remember { mutableStateOf("") }
+
+    Column {
+        TextField(
+            value = invoiceTitle,
+            singleLine = true,
+            //trailingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
+            onValueChange = { newValue -> invoiceTitle = newValue },
+            label = { Text("Invoice title") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        )
+
+        /*DropdownMenu(expanded = false, onDismissRequest = { /*TODO*/ }) {
+            DropdownMenuItem(text = { "Invoice category" }, onClick = { /*TODO*/ })
+        }*/
+
+        Text(text = "Invoice details:")
+        InvoiceCardDetailInfo(
+            type = qrCode.type,
+            category = qrCode.category,
+            timestamp = qrCode.timestamp,
+            number = qrCode.id,
+            title = qrCode.title,
+            amount = qrCode.amount.toDouble(),
+            date = qrCode.date,
+            nif = qrCode.businessNIF.toInt(),
+            iva = qrCode.iva.toDouble(),
+            status = qrCode.status
+        )
+    }
+}
+
+@Composable
+fun AlertDialogScan(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogContent: () -> Unit,
+    //icon: ImageVector,
+) {
+    AlertDialog(
+        //containerColor = MaterialTheme.colorScheme.primaryContainer,
+        //icon = { Icon(icon, contentDescription = "", tint = MaterialTheme.colorScheme.error) },
+        title = { Text(text = dialogTitle) },
+        text = { dialogContent() },
+        onDismissRequest = { onDismissRequest() },
+        confirmButton = { TextButton(onClick = { onConfirmation() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer)) { Text("Add invoice") } },
+        dismissButton = { TextButton(onClick = { onDismissRequest() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer)) { Text("Discard invoice") } }
+    )
 }
 
