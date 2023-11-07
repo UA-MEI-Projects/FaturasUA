@@ -71,7 +71,9 @@ class MainActivity : ComponentActivity() {
                     val scope = rememberCoroutineScope()
                     val isUserSignedIn = firebaseUtil.isUserSignedIn(scope = scope).collectAsState().value
                     if(adminMode){
-                        firebaseUtil.getAllReceiptsFromDB()
+                        LaunchedEffect(key1 = true){
+                            firebaseUtil.getAllReceiptsFromDB()
+                        }
 
                         AdminScreen(
                             firebaseUtil = firebaseUtil,
@@ -82,8 +84,8 @@ class MainActivity : ComponentActivity() {
                         if(isUserSignedIn){
                             LaunchedEffect(key1 = true){
 
+                                firebaseUtil.getProfile()
                                 firebaseUtil.getNif()
-                                firebaseUtil.receiptsListener()
                                 firebaseUtil.getReceiptsFromDB()
                             }
 

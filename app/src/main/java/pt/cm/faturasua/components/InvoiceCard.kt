@@ -53,6 +53,7 @@ fun InvoiceCard(
     date: String,
     nif: Number,
     iva: Number,
+    user: String,
     status: Boolean?
 ) {
 
@@ -159,7 +160,7 @@ fun InvoiceCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { firebaseUtil.changeReceiptStatus(number, true) },
+                        onClick = { firebaseUtil.changeReceiptStatus(number,user, true) },
                         modifier = Modifier
                             .weight(1f)
                             .height(40.dp)
@@ -172,7 +173,7 @@ fun InvoiceCard(
                         Text(text = " " + stringResource(R.string.invoice_button_authorise))
                     }
                     Button(
-                        onClick = { firebaseUtil.changeReceiptStatus(number, false) },
+                        onClick = { firebaseUtil.changeReceiptStatus(number,user, false) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
                         modifier = Modifier
                             .weight(1f)

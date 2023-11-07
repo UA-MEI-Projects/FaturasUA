@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 
 data class Invoice(
     val id : String = "",                                       // Invoice identifier/number
+    var userId: String = "",
     var title: String = "",                                     // Invoice designation
     var category: String = "",                                  // Invoice category/sector
     val timestamp: String = LocalDateTime.now().toString(),     // Scan datetime

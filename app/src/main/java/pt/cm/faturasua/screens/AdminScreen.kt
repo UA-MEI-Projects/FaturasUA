@@ -26,7 +26,6 @@ fun AdminScreen(
 ){
 
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val receiptsList = userViewModel.receiptsList.collectAsState().value
     Scaffold(
         topBar = {
@@ -57,6 +56,7 @@ fun AdminScreen(
                         date = it.date,
                         nif = it.businessNIF.toInt(),
                         iva = it.iva.toDouble(),
+                        user = it.userId,
                         status = it.status
                     )
                 }

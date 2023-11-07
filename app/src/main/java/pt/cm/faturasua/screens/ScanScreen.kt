@@ -118,16 +118,15 @@ fun ScanScreen(
                 imageAnalysis.setAnalyzer(
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
+                            result.userId = userViewModel.profile.value.uid
                             result.title = userViewModel.profile.value.name
                             qrCode = result
                             scope.launch {
                                 sheetState.expand()
                                 showBottomSheet = true
                                 firebaseUtil.addReceiptToDB(result)
-                                if(notifsPermission){
-                                    receiptNotificationService.sendReceiptAddedNotification()
-                                }
                             }
+                            imageAnalysis.clearAnalyzer()
                         }
                 )
                 try {

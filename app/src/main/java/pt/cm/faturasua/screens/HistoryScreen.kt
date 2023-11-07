@@ -162,7 +162,8 @@ fun HistoryScreen(
                     date = it.date,
                     nif = it.businessNIF.toInt(),
                     iva = it.iva.toDouble(),
-                    status = it.status
+                    status = it.status,
+                    user = ""
                 )
             }
         }
