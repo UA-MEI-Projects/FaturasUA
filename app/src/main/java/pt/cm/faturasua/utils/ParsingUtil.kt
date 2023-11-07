@@ -6,7 +6,7 @@ class ParsingUtil {
     fun parseQR(qrCode : String) : Invoice? {
         val fields : List<String> = qrCode.split("*")
 
-        val number : String? = parseField(fields, "G:")
+        val number : String? = parseField(fields, "G:")?.replace("/"," ")
         val type : String? = parseField(fields, "D:")
         val businessNIF : String? = parseField(fields, "A:")
         val customerNIF : String? = parseField(fields, "B:")
@@ -26,17 +26,8 @@ class ParsingUtil {
             return null
         }*/
 
-        // TODO: Ask user to given a little description for invoice, after scanning/uploading when confirming if invoice details are all OK
-        var invoice = Invoice(id = number!!, title = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
-
-        System.out.println()
-        System.out.println("number:\t\t$number")
-        System.out.println("type:\t\t$type")
-        System.out.println("businessNIF:\t$businessNIF")
-        System.out.println("customerNIF:\t$customerNIF")
-        System.out.println("date:\t\t$date")
-        System.out.println("iva:\t\t$iva€")
-        System.out.println("amount:\t\t$amount€")
+        // TODO: Ask user to give a title and select a category for invoice, after scanning/uploading when confirming if invoice details are all OK
+        val invoice = Invoice(id = number!!, title = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
 
         return invoice
     }
