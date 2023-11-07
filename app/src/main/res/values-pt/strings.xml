@@ -5,6 +5,7 @@
     <string name="settings_dark_mode">Tema escuro</string>
     <string name="settings_notifications">Notificações</string>
     <string name="settings_about_title">Acerca deste projeto</string>
+    <string name="settings_about_description">FaturasUA é um projeto que procura simplificar a gestão de faturas para as empresas, garantindo uma administração mais digital e mais eficiente das despesas e uma alocação mais rápida dos reembolsos aos respetivos funcionários.</string>
     <string name="invoice_status_authorised">Aprovada</string>
     <string name="invoice_status_rejected">Rejeitada</string>
     <string name="invoice_status_pending">Pendente</string>
