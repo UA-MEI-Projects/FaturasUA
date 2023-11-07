@@ -1,17 +1,36 @@
 package pt.cm.faturasua.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,15 +48,85 @@ fun HistoryScreen(
 ){
     val scrollState = rememberScrollState()
     val receiptsList = userViewModel.receiptsList.collectAsState().value
+    var searchQuery by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(state = scrollState)
             .padding(vertical = 10.dp)
             .padding(bottom = 60.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Search bar
+        TextField(
+            value = searchQuery,
+            singleLine = true,
+            trailingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
+            onValueChange = { newValue -> searchQuery = newValue },
+            label = { Text("Search by invoice number, title or NIF") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        )
+
+        var sliderPosition by remember { mutableStateOf(0f..2000f) }
+
+        // Range slider
+        Box(
+            modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Column (
+                    modifier = Modifier.weight(1.6f)
+                ) {
+                    RangeSlider(
+                        value = sliderPosition,
+                        onValueChange = { range -> sliderPosition = range },
+                        valueRange = 0f..2000f
+                    )
+                    Row (
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = "Min: ${sliderPosition.start.toInt()}€",
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "Max: ${sliderPosition.endInclusive.toInt()}€",
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Right,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                }
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .clickable {
+                            searchQuery = ""
+                            sliderPosition = 0f..2000f
+                        },
+                ){
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "", tint = MaterialTheme.colorScheme.error)
+                    Text(text = "Clear all\nfilters",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
+
+        // Invoice list
         if (receiptsList.isEmpty()) {
             Text(
                 text = "No invoices have been added yet!\n\nStart by adding one by clicking on the ＋ icon on the floating button.",
@@ -46,7 +135,20 @@ fun HistoryScreen(
                     .padding(20.dp)
             )
         } else {
-            receiptsList.forEach {
+            // Filter the receipts list based on the search query
+            val filteredReceiptsList = receiptsList.filter { receipt ->
+                val amount = receipt.amount.toDouble()
+                (
+                        (receipt.id.contains(searchQuery, ignoreCase = true) ||
+                        receipt.title.contains(searchQuery, ignoreCase = true) ||
+                        receipt.businessNIF.contains(searchQuery, ignoreCase = true) ||
+                        receipt.amount.contains(searchQuery)
+                        )
+                        && (amount >= sliderPosition.start) && (amount <= sliderPosition.endInclusive)
+                )
+            }
+
+            filteredReceiptsList.forEach {
                 InvoiceCard(
                     firebaseUtil = firebaseUtil,
                     type = it.type,
