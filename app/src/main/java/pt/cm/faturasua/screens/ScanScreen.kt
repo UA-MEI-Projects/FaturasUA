@@ -101,7 +101,7 @@ fun ScanScreen(
                 onDismissRequest = { openAlertDialogScan.value = false },
                 onConfirmation = { firebaseUtil.addReceiptToDB(qrCode) },
                 dialogTitle = "Invoice scanned!",
-                dialogContent = { AlertDialogScanContent(qrCode) },
+                dialogContent = qrCode,
             )
         }
     }
@@ -232,14 +232,14 @@ fun AlertDialogScan(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
-    dialogContent: () -> Unit,
+    dialogContent: Invoice,
     //icon: ImageVector,
 ) {
     AlertDialog(
         //containerColor = MaterialTheme.colorScheme.primaryContainer,
         //icon = { Icon(icon, contentDescription = "", tint = MaterialTheme.colorScheme.error) },
         title = { Text(text = dialogTitle) },
-        text = { dialogContent() },
+        text = { AlertDialogScanContent(qrCode = dialogContent) },
         onDismissRequest = { onDismissRequest() },
         confirmButton = { TextButton(onClick = { onConfirmation() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer)) { Text("Add invoice") } },
         dismissButton = { TextButton(onClick = { onDismissRequest() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer)) { Text("Discard invoice") } }
