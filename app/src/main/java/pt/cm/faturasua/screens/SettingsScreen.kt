@@ -125,8 +125,8 @@ fun SettingsScreen(
             Text(text = stringResource(R.string.settings_about_description), textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.size(30.dp))
             Image(painter = painterResource(id = R.drawable.ua_logo),
-                contentDescription = "Logo UA",
-                modifier = Modifier.size(150.dp)
+                contentDescription = "Universidade de Aveiro",
+                modifier = Modifier.size(250.dp)
             )
         }
     }
@@ -182,7 +182,7 @@ fun LanguageDropdownMenu(
             onExpandedChange = { expanded = !expanded },
         ) {
             TextField(
-                modifier = Modifier.menuAnchor(),
+                modifier = Modifier.menuAnchor().fillMaxWidth(),
                 readOnly = true,
                 value = selectedOptionText,
                 onValueChange = {},
@@ -207,7 +207,7 @@ fun LanguageDropdownMenu(
                             expanded = false
                             onOptionChange(selectionOption)
                         },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                     )
                 }
             }
