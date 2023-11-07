@@ -1,4 +1,4 @@
-package pt.cm.faturasua.components
+package pt.cm.faturasua.classes
 
 sealed class DropdownMenuClass(
     val route :String,
@@ -6,16 +6,12 @@ sealed class DropdownMenuClass(
 ) {
     object Profile: DropdownMenuClass(
         route = "profile",
-        title = "profile"
+        title = "Profile"
     )
 
     object Settings: DropdownMenuClass(
         route = "settings",
-        title = "settings"
+        title = "Settings"
     )
 
-    object LogOut : DropdownMenuClass(
-        route = "logout",
-        title = "logout"
-    )
 }

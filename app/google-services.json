@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "298111324274",
+    "firebase_url": "https://faturasua-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "faturasua",
     "storage_bucket": "faturasua.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "pt.cm.faturasua"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "298111324274-uql0nhl2lir2e1q20t8l4781fbq3eet8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.cm.faturasua",
+            "certificate_hash": "0b28095d7d5fdb4ea4ec52a231ded37fc136f2c5"
+          }
+        },
+        {
+          "client_id": "298111324274-lo3g7f1qrc2iolufvitkdersh80v0adt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAdLvjPTv9RC5lS3mze_3nVo-Xbx1yY22U"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "298111324274-lo3g7f1qrc2iolufvitkdersh80v0adt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

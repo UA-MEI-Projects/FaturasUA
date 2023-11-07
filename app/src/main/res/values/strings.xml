@@ -1,5 +1,52 @@
 <resources>
-    <string name="app_name">FaturasUA</string>
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="app_name" translatable="false">FaturasUA</string>
     <string name="default_web_client_id" translatable="false">webClientId.apps.googleusercontent.com</string>
+    <string name="settings_language_label">Language</string>
+    <string name="settings_device_language_option">Device\'s language (%1$s)</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_about_title">About this project</string>
+    <string name="settings_about_description">FaturasUA is a project designed to simplify invoice management for companies, ensuring a more digital and efficient administration of expenses and faster allocation of reimbursements to employees.</string>
+    <string name="invoice_status_authorised">Authorised</string>
+    <string name="invoice_status_rejected">Rejected</string>
+    <string name="invoice_status_pending">Pending</string>
+    <string name="invoice_button_authorise">Authorise</string>
+    <string name="invoice_button_reject">Reject</string>
+    <string name="auth_admin_login_button">Log in as company administrator</string>
+    <string name="auth_user_login_button">Log in as company employee</string>
+    <string name="auth_error_dialog_title">Error</string>
+    <string name="auth_error_dialog_empty_fields">Some required fields are empty. Please fill in all the fields and try again.</string>
+    <string name="auth_error_dialog_invalid_fields">Some of the data entered is not valid. Please fill in the fields correctly and try again.</string>
+    <string name="auth_error_dialog_wrong_credentials">The credentials you entered are incorrect. Please check the credentials you entered and try again.</string>
+    <string name="dashboard_category_general_expenses">General Expenses</string>
+    <string name="dashboard_category_meals">Meals</string>
+    <string name="dashboard_category_education">Education</string>
+    <string name="dashboard_category_health">Health</string>
+    <string name="dashboard_category_property">Property</string>
+    <string name="navbar_menu_log_out">Log Out</string>
+    <string name="dashboard_greeting_night">Good night</string>
+    <string name="dashboard_greeting_afternoon">Good afternoon</string>
+    <string name="dashboard_greeting_morning">Good morning</string>
+    <string name="dashboard_greeting_bedtime">Go to sleep</string>
+    <string name="dashboard_summary_label">Here is a summary of your invoices:</string>
+    <string name="dashboard_total_amount_categories_label">Total invoice amounts entered by you, per category</string>
+    <string name="dashboard_pending_invoices">You have %1$s invoices pending approval</string>
+    <string name="dashboard_tax_number_display">Your company tax number is %1$s</string>
+    <string name="history_clear_filters">Clear all\nfilters</string>
+    <string name="history_search_bar_label">Search by invoice number, title or NIF…</string>
+    <string name="invoice_category">Category: %1$s</string>
+    <string name="invoice_type">Invoice type: %1$s</string>
+    <string name="invoice_number">Invoice number: %1$s</string>
+    <string name="invoice_entity_name">Business name: %1$s</string>
+    <string name="invoice_entity_nif">Business tax number: %1$s</string>
+    <string name="invoice_tax_address">Business tax address:</string>
+    <string name="invoice_net_price">Net value (excluding VAT): %1$s€</string>
+    <string name="invoice_vat_price">VAT value: %1$s€</string>
+    <string name="invoice_total_amount">Total amount paid: %1$s€</string>
+    <string name="invoice_scan_date">Scanned on: %1$s</string>
+    <string name="stats_total_invoices">Total number of invoices entered by you:</string>
+    <string name="stats_user_activity">User Activity</string>
+    <string name="stats_not_enough_data">There is not enough data to display charts here right now.</string>
+    <string name="stats_graph_label">Invoices by date</string>
+    <string name="stats_graph_title">Total expenses by date:</string>
 </resources>
