@@ -12,9 +12,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +41,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -196,9 +200,6 @@ fun ScanFABItem(
     showLabel : Boolean = true,
     onScanFabItemClick : (ScanFABItemClass) -> Unit
 ){
-    val buttonColors = MaterialTheme.colorScheme.secondary
-    val shadow = Color.Black.copy(0.5f)
-//    val image: ImageBitmap = ImageBitmap.imageResource(id = item.iconId)
     Row {
        if(showLabel){
            Text(
@@ -219,10 +220,10 @@ fun ScanFABItem(
 
            Spacer(modifier = Modifier.size(16.dp))
        }
-        
-        Canvas(
+
+        Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(30.dp)
                 .clickable(
                     interactionSource = MutableInteractionSource(),
                     indication = rememberRipple(
@@ -233,28 +234,20 @@ fun ScanFABItem(
                     onClick = { onScanFabItemClick.invoke(item) }
                 )
         ) {
-            drawCircle(
-                color = shadow,
-                radius = itemScale,
-                center = Offset(
-                    center.x + 2f,
-                    center.y + 2f
+            Canvas(modifier = Modifier.matchParentSize()) {
+                drawCircle(
+                    color = Color.White,
+                    radius = size.minDimension - 20,
+                    center = center
                 )
-            )
+            }
 
-            drawCircle(
-                color = buttonColors,
-                radius = itemScale
+            Image(
+                painter = painterResource(id = item.iconId),
+                contentDescription = item.label,
+                modifier = Modifier
+                    .size(30.dp)
             )
-
-/*            drawImage(
-                image = image,
-                topLeft = Offset(
-                    center.x - (image.width / 2),
-                    center.y - (image.height / 2)
-                ),
-                alpha = alpha
-            )*/
         }
     }
 }

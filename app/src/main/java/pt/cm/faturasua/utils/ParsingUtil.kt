@@ -16,15 +16,8 @@ class ParsingUtil {
 
 
         if (listOf(number, type, businessNIF, customerNIF, date, iva, amount).any { it == null }) {
-            System.out.println("ERRO: O código QR lido não é uma fatura válida. Por favor tente com outro documento.")
             return null
         }
-
-        // TODO: Get customer NIF dynamically from DB (hardcoded for now)
-        /*        if (customerNIF != "509441130") {
-            System.out.println("ERRO: A fatura lida não foi emitida com o seu número de contribuinte (NIF) e, portanto, não pode ser adicionada à sua conta.")
-            return null
-        }*/
 
         return Invoice(
             id = number!!,

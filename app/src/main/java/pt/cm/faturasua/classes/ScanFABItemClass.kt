@@ -14,13 +14,13 @@ sealed class ScanFABItemClass(
     val route: String
 ){
     object Scan : ScanFABItemClass(
-        iconId = R.drawable.ic_launcher_foreground,
+        iconId = R.drawable.scan,
         label = "Scan invoice",
         route = "scanFab"
     )
 
     object AddImage : ScanFABItemClass(
-        iconId = R.drawable.ic_launcher_foreground,
+        iconId = R.drawable.gallery,
         label = "Upload invoice",
         route = "addImageFab"
     )
