@@ -32,8 +32,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,6 +58,8 @@ import com.google.zxing.common.HybridBinarizer
 import kotlinx.coroutines.launch
 import pt.cm.faturasua.classes.ScanFABItemClass
 import pt.cm.faturasua.classes.ScanFABState
+import pt.cm.faturasua.data.Invoice
+import pt.cm.faturasua.screens.AlertDialogScan
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.utils.QrCodeUtil
 import pt.cm.faturasua.utils.ReceiptNotificationService
@@ -83,6 +87,25 @@ fun ScanFAB(
         ReceiptNotificationService(context = context)
     }
 
+    var qrCode by remember{
+        mutableStateOf(Invoice())
+    }
+
+    val openAlertDialogScan = remember { mutableStateOf(false) }
+    when {
+        openAlertDialogScan.value -> {
+            AlertDialogScan(
+                onDismissRequest = { openAlertDialogScan.value = false },
+                onConfirmation = {
+                    firebaseUtil.addReceiptToDB(qrCode)
+                    openAlertDialogScan.value = false
+                },
+                dialogTitle = "Invoice uploaded!",
+                dialogContent = qrCode,
+            )
+        }
+    }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
@@ -92,9 +115,11 @@ fun ScanFAB(
 
                 val qrCodeUtil = QrCodeUtil { result ->
                     result.userId = userViewModel.profile.value.uid
-                    result.title = userViewModel.profile.value.name
+                    result.title = "Invoice by ${userViewModel.profile.value.name}"
+                    result.category = "No category provided yet"
+                    qrCode = result
                     scope.launch {
-                        firebaseUtil.addReceiptToDB(result)
+                        openAlertDialogScan.value = true
                     }
                     if (userViewModel.notifsOn.value){
                         receiptNotificationService.sendReceiptAddedNotification()
