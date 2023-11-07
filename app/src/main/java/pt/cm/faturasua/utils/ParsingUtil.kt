@@ -3,16 +3,16 @@ package pt.cm.faturasua.utils
 import pt.cm.faturasua.data.Invoice
 
 class ParsingUtil {
-    fun parseQR(qrCode : String) : Invoice? {
-        val fields : List<String> = qrCode.split("*")
+    fun parseQR(qrCode: String): Invoice? {
+        val fields: List<String> = qrCode.split("*")
 
-        val number : String? = parseField(fields, "G:")?.replace("/"," ")
-        val type : String? = parseField(fields, "D:")
-        val businessNIF : String? = parseField(fields, "A:")
-        val customerNIF : String? = parseField(fields, "B:")
-        val date : String? = parseField(fields, "F:")
-        val iva : String? = parseField(fields, "N:")
-        val amount : String? = parseField(fields, "O:")
+        val number: String? = parseField(fields, "G:")?.replace("/", " ")
+        val type: String? = parseField(fields, "D:")
+        val businessNIF: String? = parseField(fields, "A:")
+        val customerNIF: String? = parseField(fields, "B:")
+        val date: String? = parseField(fields, "F:")
+        val iva: String? = parseField(fields, "N:")
+        val amount: String? = parseField(fields, "O:")
 
 
         if (listOf(number, type, businessNIF, customerNIF, date, iva, amount).any { it == null }) {
@@ -21,15 +21,22 @@ class ParsingUtil {
         }
 
         // TODO: Get customer NIF dynamically from DB (hardcoded for now)
-/*        if (customerNIF != "509441130") {
+        /*        if (customerNIF != "509441130") {
             System.out.println("ERRO: A fatura lida não foi emitida com o seu número de contribuinte (NIF) e, portanto, não pode ser adicionada à sua conta.")
             return null
         }*/
 
-        // TODO: Ask user to give a title and select a category for invoice, after scanning/uploading when confirming if invoice details are all OK
-        val invoice = Invoice(id = number!!, title = "", category = "", type = type!!, businessNIF = businessNIF!!, customerNIF = customerNIF!!, date = date!!, iva = iva!!, amount = amount!!)
-
-        return invoice
+        return Invoice(
+            id = number!!,
+            title = "",
+            category = "",
+            type = type!!,
+            businessNIF = businessNIF!!,
+            customerNIF = customerNIF!!,
+            date = date!!,
+            iva = iva!!,
+            amount = amount!!
+        )
     }
 
     private fun parseField(fields : List<String>, header : String) : String? {

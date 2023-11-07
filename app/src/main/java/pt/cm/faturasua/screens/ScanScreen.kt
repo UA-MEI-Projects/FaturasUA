@@ -3,7 +3,6 @@ package pt.cm.faturasua.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.util.Log
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,21 +15,22 @@ import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.core.resolutionselector.ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -43,7 +43,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -58,6 +60,7 @@ import pt.cm.faturasua.components.InvoiceCardDetailInfo
 import pt.cm.faturasua.data.Invoice
 import pt.cm.faturasua.utils.FirebaseUtil
 import pt.cm.faturasua.utils.ParsingUtil
+import pt.cm.faturasua.utils.PreferencesManager
 import pt.cm.faturasua.utils.QrCodeUtil
 import pt.cm.faturasua.utils.ReceiptNotificationService
 import pt.cm.faturasua.viewmodel.UserViewModel
@@ -77,9 +80,6 @@ fun ScanScreen(
     val cameraProviderFuture = remember{
         ProcessCameraProvider.getInstance(context)
     }
-    var showBottomSheet by remember{ // TODO: To delete
-        mutableStateOf(false)
-    }
 
     var qrCode by remember{
         mutableStateOf(Invoice())
@@ -94,12 +94,15 @@ fun ScanScreen(
         )
     }
 
-    val openAlertDialogScan = remember { mutableStateOf(true) }
+    val openAlertDialogScan = remember { mutableStateOf(false) }
     when {
         openAlertDialogScan.value -> {
             AlertDialogScan(
                 onDismissRequest = { openAlertDialogScan.value = false },
-                onConfirmation = { firebaseUtil.addReceiptToDB(qrCode) },
+                onConfirmation = {
+                    firebaseUtil.addReceiptToDB(qrCode)
+                    openAlertDialogScan.value = false
+                },
                 dialogTitle = "Invoice scanned!",
                 dialogContent = qrCode,
             )
@@ -146,11 +149,10 @@ fun ScanScreen(
                     ContextCompat.getMainExecutor(context),
                     QrCodeUtil{result ->
                             result.userId = userViewModel.profile.value.uid
-                            result.title = userViewModel.profile.value.name
+                            result.title = "Invoice by ${userViewModel.profile.value.name}"
+                            result.category = "No category provided yet"
                             qrCode = result
                             scope.launch {
-                                //sheetState.expand()
-                                //showBottomSheet = true
                                 openAlertDialogScan.value = true
                             }
                             imageAnalysis.clearAnalyzer()
@@ -170,20 +172,6 @@ fun ScanScreen(
             },
                     modifier = Modifier.weight(1f)
             )
-            if(showBottomSheet){
-                ModalBottomSheet(
-                    onDismissRequest = {
-                        showBottomSheet = false
-                    },
-                    sheetState = sheetState,
-                    modifier = Modifier.padding(20.dp)
-                ){
-
-                    
-                }
-
-            }
-
         }
     }
 }
@@ -193,25 +181,41 @@ fun AlertDialogScanContent(
     qrCode : Invoice
 ){
     var invoiceTitle by remember { mutableStateOf("") }
-    var invoiceCategory by remember { mutableStateOf("") }
 
     Column {
         TextField(
             value = invoiceTitle,
             singleLine = true,
-            //trailingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
-            onValueChange = { newValue -> invoiceTitle = newValue },
+            onValueChange = { newValue -> invoiceTitle = newValue ; qrCode.title = newValue },
             label = { Text("Invoice title") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(10.dp)
         )
 
-        /*DropdownMenu(expanded = false, onDismissRequest = { /*TODO*/ }) {
-            DropdownMenuItem(text = { "Invoice category" }, onClick = { /*TODO*/ })
-        }*/
+        val optionsList : List<String> = listOf(stringResource(R.string.dashboard_category_general_expenses), stringResource(R.string.dashboard_category_meals), stringResource(R.string.dashboard_category_education), stringResource(R.string.dashboard_category_health), stringResource(R.string.dashboard_category_property))
+        DropdownMenuCategories(
+            options = optionsList,
+            selected = "",
+            label = "Invoice category",
+            onOptionChange = { selectedOption: String ->
+                qrCode.category = when (selectedOption) {
+                    optionsList[0] -> "GE"
+                    optionsList[1] -> "M"
+                    optionsList[2] -> "E"
+                    optionsList[3] -> "H"
+                    optionsList[4] -> "P"
+                    else -> selectedOption
+                }
+            }
+        )
 
-        Text(text = "Invoice details:")
+        Text(
+            text = "Invoice details:",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
         InvoiceCardDetailInfo(
             type = qrCode.type,
             category = qrCode.category,
@@ -233,16 +237,71 @@ fun AlertDialogScan(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogContent: Invoice,
-    //icon: ImageVector,
 ) {
     AlertDialog(
-        //containerColor = MaterialTheme.colorScheme.primaryContainer,
-        //icon = { Icon(icon, contentDescription = "", tint = MaterialTheme.colorScheme.error) },
         title = { Text(text = dialogTitle) },
         text = { AlertDialogScanContent(qrCode = dialogContent) },
         onDismissRequest = { onDismissRequest() },
         confirmButton = { TextButton(onClick = { onConfirmation() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer)) { Text("Add invoice") } },
         dismissButton = { TextButton(onClick = { onDismissRequest() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer, contentColor = MaterialTheme.colorScheme.onErrorContainer)) { Text("Discard invoice") } }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuCategories(
+    options : List<String>,
+    selected : String,
+    label: String,
+    onOptionChange : (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(selected) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded },
+        ) {
+            TextField(
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
+                readOnly = true,
+                value = selectedOptionText,
+                onValueChange = {},
+                label = { Text(label) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                    unfocusedTextColor = Color.Black,
+                    focusedTextColor = Color.Black,
+                    unfocusedLabelColor = Color.DarkGray,
+                    focusedLabelColor = Color.DarkGray,
+                ),
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+            ) {
+                options.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            selectedOptionText = selectionOption
+                            expanded = false
+                            onOptionChange(selectionOption)
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
+    }
 }
 
